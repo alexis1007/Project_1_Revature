@@ -1,7 +1,6 @@
-package org.example.models;
+package org.example.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
@@ -77,3 +76,5 @@ public class User {
         this.userProfile = userProfile;
     }
 }
+
+// some test change
