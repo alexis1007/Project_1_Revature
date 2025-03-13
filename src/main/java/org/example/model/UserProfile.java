@@ -16,11 +16,11 @@ public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "users_profiles_id")
-    private Long user_profile_id;
+    private Long usersProfilesId;
 
     @OneToOne
     @JoinColumn(name = "users_id", nullable = false)
-    private Long user_id; // replace to private User user;
+    private Long usersId; // replace to private User user;
 
     @Column(name = "mailing_address", nullable = false)
     private Long mailingAddressesId;
