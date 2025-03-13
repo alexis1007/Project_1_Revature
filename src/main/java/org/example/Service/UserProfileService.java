@@ -7,29 +7,28 @@ import org.example.model.UserProfile;
 import org.example.repository.UserProfileRepository;
 
 public class UserProfileService implements UserProfileServiceInterface {
-    private final UserProfileRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
 
-    public UserProfileService(UserProfileRepository userRepository) {
-        // TODO Auto-generated method stub
-        this.userRepository = userRepository;
+    public UserProfileService(UserProfileRepository userProfileRepository) {
+        this.userProfileRepository = userProfileRepository;
     }
 
     @Override
     public List<UserProfile> findAllUserProfiles() {
         // TODO Auto-generated method stub
-        return userRepository.findAll();
+        return userProfileRepository.findAll();
     }
 
     @Override
     public Optional<UserProfile> findUserProfileById(Long id) {
         // TODO Auto-generated method stub
-        return userRepository.findById(id);
+        return userProfileRepository.findById(id);
     }
 
     @Override
     public UserProfile registerUserProfile(UserProfile user) {
         // TODO Auto-generated method stub
-        return userRepository.save(user);
+        return userProfileRepository.save(user);
     }
 
     @Override
