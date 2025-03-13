@@ -15,32 +15,35 @@ public class UserProfileService implements UserProfileServiceInterface {
 
     @Override
     public List<UserProfile> findAllUserProfiles() {
-        // TODO Auto-generated method stub
         return userProfileRepository.findAll();
     }
 
     @Override
     public Optional<UserProfile> findUserProfileById(Long id) {
-        // TODO Auto-generated method stub
         return userProfileRepository.findById(id);
     }
 
     @Override
     public UserProfile registerUserProfile(UserProfile user) {
-        // TODO Auto-generated method stub
         return userProfileRepository.save(user);
     }
 
     @Override
     public Optional<UserProfile> updateUserProfile(Long id, UserProfile profile) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateUserProfile'");
+        return userProfileRepository.findById(id).map(existingProfile -> {
+            existingProfile.setFirstName(profile.getFirstName());
+            existingProfile.setLastName(profile.getLastName());
+            // Update additional fields as necessary
+            return userProfileRepository.save(existingProfile);
+        });
     }
 
     @Override
     public boolean deleteUserProfile(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUserProfile'");
+        return userProfileRepository.findById(id).map(profile -> {
+            userProfileRepository.delete(profile);
+            return true;
+        }).orElse(false);
     }
 
 }

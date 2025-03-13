@@ -26,10 +26,10 @@ public class UserProfile {
     private Long mailingAddressesId;
 
     @Column(name = "first_name", nullable = false, length = 50)
-    private String username;
+    private String firstName;
 
     @Column(name = "last_name", nullable = false, length = 50)
-    private String passwordHash;
+    private String lastName;
 
     @Column(name = "user_types_id", nullable = false)
     private Long userTypesId;
@@ -39,5 +39,21 @@ public class UserProfile {
 
     @Column(name = "credit_score")
     private Long creditScore;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
 }
