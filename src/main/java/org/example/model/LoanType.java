@@ -22,11 +22,11 @@ public class LoanType {
     public LoanType() {
     }
 
-    public Long getLoanTypeId() {
+    public Long getId() {
         return id;
     }
 
-    public void setLoanTypeId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
