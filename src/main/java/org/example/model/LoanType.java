@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "loan_type")
+@Table(name = "loan_type", schema = "loans")
 public class LoanType {
 
     @Id
@@ -18,6 +18,9 @@ public class LoanType {
 
     @Column(name = "loan_type", length = 10, unique = true)
     private String loanType;
+
+    public LoanType() {
+    }
 
     public Long getLoanTypeId() {
         return id;
@@ -33,5 +36,13 @@ public class LoanType {
 
     public void setLoanType(String loanType) {
         this.loanType = loanType;
+    }
+
+    @Override
+    public String toString() {
+        return "LoanType{" +
+                "id=" + id +
+                ", loanType='" + loanType + '\'' +
+                '}';
     }
 }

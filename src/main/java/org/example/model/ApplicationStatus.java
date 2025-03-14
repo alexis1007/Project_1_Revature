@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "application_statuses")
-public class ApplicationStatuses{
+@Table(name = "application_statuses", schema = "loans")
+public class ApplicationStatus{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_statuses_id")
@@ -20,6 +20,8 @@ public class ApplicationStatuses{
 
     @Column(name = "description", length = 100)
     private String description;
+
+    public ApplicationStatus() {}
 
     public int getId() {
         return id;
@@ -45,4 +47,12 @@ public class ApplicationStatuses{
         this.description = description;
     }
 
+    @Override
+    public String toString() {
+        return "ApplicationStatus{" +
+                "id=" + id +
+                ", status='" + status + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
