@@ -1,5 +1,7 @@
 package org.example.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,14 +19,14 @@ public class LoanApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "loan_applications_id")
     private Long id;
-    @Column(name="principal_balance", precision = 10, scale = 2)
-    private Double principalBalance;
-    @Column(name = "interest", precision = 5, scale = 2)
-    private Double interest;
+    @Column(name="principal_balance", precision=10, scale=2)
+    private BigDecimal principalBalance;
+    @Column(name = "interest", precision=5, scale=2)
+    private BigDecimal interest;
     @Column(name="term_length")
     private Integer termLength;
-    @Column(name="total_balance", precision = 10, scale = 2)
-    private Double totalBalance;
+    @Column(name="total_balance", precision=10, scale=2)
+    private BigDecimal totalBalance;
 
     @ManyToOne
     @JoinColumn(name = "application_statuses_id")
@@ -71,19 +73,19 @@ public class LoanApplication {
         this.userProfile = userProfile;
     }
 
-    public Double getPrincipalBalance() {
+    public BigDecimal getPrincipalBalance() {
         return principalBalance;
     }
 
-    public void setPrincipalBalance(Double principalBalance) {
+    public void setPrincipalBalance(BigDecimal principalBalance) {
         this.principalBalance = principalBalance;
     }
 
-    public Double getInterest() {
+    public BigDecimal getInterest() {
         return interest;
     }
 
-    public void setInterest(Double interest) {
+    public void setInterest(BigDecimal interest) {
         this.interest = interest;
     }
 
@@ -95,11 +97,11 @@ public class LoanApplication {
         this.termLength = termLength;
     }
 
-    public Double getTotalBalance() {
+    public BigDecimal getTotalBalance() {
         return totalBalance;
     }
 
-    public void setTotalBalance(Double totalBalance) {
+    public void setTotalBalance(BigDecimal totalBalance) {
         this.totalBalance = totalBalance;
     }
 

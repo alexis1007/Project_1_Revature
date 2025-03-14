@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.example.model.UserProfile;
 import org.example.repository.UserProfileRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserProfileService implements UserProfileServiceInterface {
     private final UserProfileRepository userProfileRepository;
 
