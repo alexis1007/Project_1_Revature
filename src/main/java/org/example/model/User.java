@@ -1,55 +1,55 @@
 package org.example.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 
 @Entity
-    @Table(name = "users")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "user_id")
-
+@Table(name = "users", schema = "loans")
 public class User {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "users_id")
-    private Long userId;
+    private Long id;
 
-    @Column(name = "email", nullable = false, length = 100)
-    private String email;
+    @Column(name = "username", nullable = false, length = 45, unique = true)
+    private String username;
 
-    @Column(name = "passwor_hash", nullable = false, length = 100)
+    @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
-
-    // Mark the "role" field as the back reference to avoid circular serialization.
-//    @JsonBackReference(value = "roleUsers")
 
     @ManyToOne
     @JoinColumn(name = "user_types_id", nullable = false)
-    private int userTypesId;
+    private UserType userType;
 
-//    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserProfile userProfile;
 
-    // getters and setters
+    public User() {}
 
-
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPasswordHash() {
@@ -60,12 +60,12 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public int getUserTypesId() {
-        return userTypesId;
+    public UserType getUserType() {
+        return userType;
     }
 
-    public void setUserTypesId(int userTypesId) {
-        this.userTypesId = userTypesId;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public UserProfile getUserProfile() {
@@ -75,6 +75,13 @@ public class User {
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
     }
-}
 
-// some test change
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", userType=" + userType +
+                '}';
+    }
+}

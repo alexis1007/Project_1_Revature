@@ -1,38 +1,43 @@
 package org.example.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "loan_applications")
+@Table(name = "loan_applications", schema = "loans")
 public class LoanApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "loan_applications_id")
     private Long id;
+    @Column(name="principal_balance", precision = 10, scale = 2)
+    private Double principalBalance;
+    @Column(name = "interest", precision = 5, scale = 2)
+    private Double interest;
+    @Column(name="term_length")
+    private Integer termLength;
+    @Column(name="total_balance", precision = 10, scale = 2)
+    private Double totalBalance;
 
     @ManyToOne
-    @JoinColumn(name = "application_status_id")
+    @JoinColumn(name = "application_statuses_id")
     private ApplicationStatus applicationStatus;
     @ManyToOne
     @JoinColumn(name = "loan_type_id")
     private LoanType loanType;
-
     @ManyToOne
     @JoinColumn(name = "user_profiles_id")
     private UserProfile userProfile;
 
-    @Column(name="principal_balance")
-    private Double principalBalance;
-    @Column()
-    private Double interest;
-    @Column(name="term_length")
-    private Long termLength;
-    @Column(name="total_balance")
-    private Long totalBalance;
-
     public LoanApplication() {
     }
-
 
     public Long getId() {
         return id;
@@ -82,20 +87,34 @@ public class LoanApplication {
         this.interest = interest;
     }
 
-    public Long getTermLength() {
+    public Integer getTermLength() {
         return termLength;
     }
 
-    public void setTermLength(Long termLength) {
+    public void setTermLength(Integer termLength) {
         this.termLength = termLength;
     }
 
-    public Long getTotalBalance() {
+    public Double getTotalBalance() {
         return totalBalance;
     }
 
-    public void setTotalBalance(Long totalBalance) {
+    public void setTotalBalance(Double totalBalance) {
         this.totalBalance = totalBalance;
+    }
+
+    @Override
+    public String toString() {
+        return "LoanApplication{" +
+                "id=" + id +
+                ", applicationStatus=" + applicationStatus +
+                ", loanType=" + loanType +
+                ", userProfile=" + userProfile +
+                ", principalBalance=" + principalBalance +
+                ", interest=" + interest +
+                ", termLength=" + termLength +
+                ", totalBalance=" + totalBalance +
+                '}';
     }
 }
 

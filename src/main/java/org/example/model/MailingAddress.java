@@ -1,31 +1,37 @@
 package org.example.model;
 
-import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "mailing_addresses")
+@Table(name = "mailing_addresses", schema = "loans")
 public class MailingAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mailing_addresses_id")
     private Long id;
 
-    @Column(nullable = true, length = 30)
+    @Column(name = "street", length = 45)
     private String street;
 
-    @Column(nullable = true, length = 30)
+    @Column(name = "city", length = 45)
     private String city;
 
-    @Column(nullable = true, length = 30)
+    @Column(name = "state", length = 45)
     private String state;
 
-    @Column(nullable = true, length = 30)
+    @Column(name = "zip", length = 45)
     private String zip;
 
-    @Column(nullable = true, length = 30)
+    @Column(name = "country", length = 45)
     private String country;
+
+    public MailingAddress() {
+    }
 
     public Long getId() {
         return id;
@@ -73,5 +79,17 @@ public class MailingAddress {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+    
+    @Override
+    public String toString() {
+        return "MailingAddress{" +
+                "id=" + id +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }

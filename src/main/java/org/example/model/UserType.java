@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user_types")
-public class UserTypes {
+@Table(name = "user_types", schema = "loans")
+public class UserType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_types_id")
@@ -17,6 +17,9 @@ public class UserTypes {
 
     @Column(name = "user_type", length = 45, unique = true)
     private String userType;
+
+    public UserType() {
+    }
     
     public int getId(){
         return id;
@@ -31,5 +34,13 @@ public class UserTypes {
 
     public void setUserType(String userType){
         this.userType = userType;
+    }
+
+    @Override
+    public String toString() {
+        return "UserType{" +
+                "id=" + id +
+                ", userType='" + userType + '\'' +
+                '}';
     }
 }
