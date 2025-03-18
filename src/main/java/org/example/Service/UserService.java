@@ -20,6 +20,11 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public Optional<User> findUserById(Long id){
         return userRepository.findById(id);
     }
@@ -29,9 +34,41 @@ public class UserService implements UserServiceInterface{
         Long userTypeId = user.getUserType().getId();
         UserType userType = userTypeRepository.findById(userTypeId)
                 .orElseThrow(() -> new RuntimeException("User type not found with id " + userTypeId));
-        userRepository.findByUsername(user.getUsername()).ifPresent(username -> {
-            throw new RuntimeException("Username" + username + "already exists");
+        userRepository.findByUsername(user.getUsername()).ifPresent(existingUser -> {
+            throw new RuntimeException("Username " + existingUser.getUsername() + " already exists");
         });
         return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> updateUser(Long id, User userDetails) {
+        return userRepository.findById(id).map(existingUserById -> {
+            Optional.ofNullable(userDetails.getUsername())
+                    .ifPresent(newUsername -> {
+                        userRepository.findByUsername(newUsername).ifPresent(existingUsername -> {
+                            if(!existingUsername.getUsername().equals(existingUserById.getUsername())) {
+                                throw new RuntimeException("Username " + existingUsername.getUsername() + " already exists");
+                            }
+                        });
+                        existingUserById.setUsername(newUsername);
+                    });
+            Optional.ofNullable(userDetails.getPasswordHash())
+                    .ifPresent(existingUserById::setPasswordHash);
+            Optional.ofNullable(userDetails.getUserType())
+                    .ifPresent(newUserType -> {
+                        existingUserById.setUserType(userTypeRepository.findById(newUserType.getId())
+                                .orElseThrow(() -> new RuntimeException("User type not found with id " + newUserType.getId())));
+                    });
+
+            return userRepository.save(existingUserById);
+        });
+    }
+
+    @Override
+    public boolean deleteUser(Long id){
+        return userRepository.findById(id).map(user -> {
+            userRepository.delete(user);
+            return true;
+        }).orElse(false);
     }
 }
