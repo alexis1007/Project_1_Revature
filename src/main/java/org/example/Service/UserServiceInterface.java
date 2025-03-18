@@ -11,4 +11,6 @@ public interface UserServiceInterface {
     User registerUser(User user);
     Optional<User> updateUser(Long id, User userDetails);
     boolean deleteUser(Long id);
+
+    Optional<User> validateUser (String username, String passwordHash);
 }

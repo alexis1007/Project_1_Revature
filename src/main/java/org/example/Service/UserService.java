@@ -71,4 +71,9 @@ public class UserService implements UserServiceInterface{
             return true;
         }).orElse(false);
     }
+
+    @Override
+    public Optional<User> validateUser(String username, String password){
+        return userRepository.findByUsernameAndPasswordHash(username, password);
+    }
 }
