@@ -53,4 +53,20 @@ public class LoanApplicationService implements LoanAppInterface {
         }).orElse(false);
     }
 
+    @Override
+    public Optional<LoanApplication> approveLoan(Long id, LoanApplication loanApplication) {
+        return loanAppRepository.findById(id).map(existingLoan -> {
+            existingLoan.setApplicationStatus(loanApplication.getApplicationStatus());
+            return loanAppRepository.save(existingLoan);
+        });
+    }
+
+    @Override
+    public Optional<LoanApplication> rejectLoan(Long id, LoanApplication loanApplication) {
+        return loanAppRepository.findById(id).map(existingLoan -> {
+            existingLoan.setApplicationStatus(loanApplication.getApplicationStatus());
+            return loanAppRepository.save(existingLoan);
+        });
+    }
+
 }
