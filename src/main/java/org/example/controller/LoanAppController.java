@@ -54,12 +54,12 @@ public class LoanAppController {
      * task
      * along with a motivational quote.
      *
-     * @param task    The loan to be created.
+     * @param loan    The loan to be created.
      * @param session The HttpSession containing the logged-in user.
      * @return A TaskResponseDto wrapping the saved task and a motivational quote.
      */
     @PostMapping
-    public ResponseEntity<?> createLoan(@RequestBody LoanApplication task, HttpSession session) {
+    public ResponseEntity<?> createLoan(@RequestBody LoanApplication loan, HttpSession session) {
         // Retrieve the logged-in user from the session.
         User sessionUser = (User) session.getAttribute("user");
         if (sessionUser == null) {
@@ -67,10 +67,10 @@ public class LoanAppController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
         }
         System.out.println(sessionUser.getUsername());
-        // Associate the new task with the logged-in user's profile.
-        task.setUserProfile(sessionUser.getUserProfile());
-        // Save the looan via the service layer.
-        LoanApplication savedLoan = loanAppService.createLoan(task);
+        // Associate the new loan with the logged-in user's profile.
+        loan.setUserProfile(sessionUser.getUserProfile());
+        // Save the loan via the service layer.
+        LoanApplication savedLoan = loanAppService.createLoan(loan);
         // Retrieve a motivational quote from the external API.
         String quote = motivationalQuoteService.getRandomQuote();
         // Wrap the saved loan and quote in a response DTO.
@@ -97,5 +97,21 @@ public class LoanAppController {
     public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {
         boolean deleted = loanAppService.deleteLoan(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<LoanApplication> approveLoan(@PathVariable Long id,
+            @RequestBody LoanApplication loanApplication) {
+        return loanAppService.approveLoan(id, loanApplication)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}/reject")
+    public ResponseEntity<LoanApplication> rejectLoan(@PathVariable Long id,
+            @RequestBody LoanApplication loanApplication) {
+        return loanAppService.rejectLoan(id, loanApplication)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

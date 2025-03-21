@@ -24,4 +24,9 @@ public interface LoanAppInterface {
     Optional<LoanApplication> updateLoan(Long id, LoanApplication loanApplication);
 
     boolean deleteLoan(Long id);
+
+    Optional<LoanApplication> approveLoan(Long id, LoanApplication loanApplication);
+
+    Optional<LoanApplication> rejectLoan(Long id, LoanApplication loanApplicationd);
+
 }
