@@ -35,8 +35,21 @@ public class LoanAppController {
      * Returns all loans.
      */
     @GetMapping
-    public ResponseEntity<List<LoanApplication>> getAllLoans() {
-        return ResponseEntity.ok(loanAppService.findAllLoans());
+    public ResponseEntity<?> getAllLoans(HttpSession session) {
+        // Retrieve the logged-in user from the session.
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser == null) {
+            // If no user is logged in, return 401 Unauthorized.
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
+        }
+
+        if (sessionUser.isManager()) {
+            // If the user is a manager, return all loans.
+            return ResponseEntity.ok(loanAppService.findAllLoans());
+        } else {
+            // If the user is not a manager, return loans belonging to their profile.
+            return ResponseEntity.ok(loanAppService.getLoansByUserProfile(sessionUser.getUserProfile()));
+        }
     }
 
     /**
