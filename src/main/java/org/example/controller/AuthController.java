@@ -1,6 +1,8 @@
 package org.example.controller;
 
-import jakarta.servlet.http.HttpSession;
+import org.example.DTO.AuthRequest;
+import org.example.DTO.AuthResponse;
+import org.example.Service.JwtService;
 import org.example.Service.UserService;
 import org.example.model.User;
 import org.springframework.http.HttpStatus;
@@ -11,11 +13,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -25,20 +30,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User loginRequest, HttpSession session) {
-        Optional<User> userOpt = userService.validateUser(loginRequest.getUsername(), loginRequest.getPasswordHash());
-        if(userOpt.isPresent()){
-            session.setAttribute("user", userOpt.get());
-            System.out.println(userOpt.get().getUsername());
-            return ResponseEntity.ok(userOpt.toString());
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+        Optional<User> userOpt = userService.validateUser(authRequest.getUsername(), authRequest.getPassword());
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            String token = jwtService.generateToken(
+                user.getUsername(), 
+                user.getUserType().getUserType()
+            );
+            return ResponseEntity.ok(new AuthResponse(token, user.getUserType().getUserType()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials");
         }
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity.ok("Logged out successfully");
-    }
+    // Con JWT no necesitamos un endpoint de logout explícito,
+    // ya que el token se maneja completamente en el cliente
 }
