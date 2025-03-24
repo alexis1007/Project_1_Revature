@@ -7,17 +7,18 @@ VALUES
 INSERT INTO loans.users
   (username, password_hash, user_types_id)
 VALUES
-  ('emmaj', 'passwordemma', 1),
-  ('liams', 'passwordliam', 1),
-  ('oliviaw', 'passwordolivia', 2),
-  ('noahb', 'passwordnoah', 2),
-  ('avaj', 'passwordava', 2),
-  ('williamg', 'passwordwilliam', 2),
-  ('sophiam', 'passwordsophia', 2),
-  ('jamesd', 'passwordjames', 2),
-  ('isabellar', 'passwordisabella', 2),
-  ('benjaminm', 'passwordbenjamin', 2);
-
+  ('emmaj', '$2a$04$gRoPogr8qFGt58x4KEb9Duwy8s1LuULHvh.Xze5hrcce6kqaz3yWu', 1),
+  ('liams', '$2a$04$YFFqoqTnjK/1gxVX/vsIKOoqhk7lGLQf9RXaJrOQNyaVxQ/b7LBHq', 1),
+  ('oliviaw', '$2a$04$S/he2Uvu0FYzFWFfV1h9quNAC4hbHYQLbHtyLKvSiAcEyg.9MbHsq', 2),
+  ('noahb', '$2a$04$Z/oPBD3YiLp.Lk/zK/4BHOQLH63//tQaV/l97M1SE/Gy9Gb9bV7Um', 2),
+  ('avaj', '$2a$04$CobRPWEJSzuF9d2c2x/ggeVd2fn8Ql8jd79jh6WCVOmjk06hNwDUm', 2),
+  ('williamg', '$2a$04$QjZ2hLj808B.g4t0k9QPFON7DnWP3Z5aswH8Oy8AqoIgjq9E3L/IG', 2),
+  ('sophiam', '$2a$04$aP3LqweqxNFBiPOsSADfq.CapVqaP6Pa6Tp.FSJJ7hm0o8bv/hjVa', 2),
+  ('jamesd', '$2a$04$H9dFI7rd2ZbWY4S0ZJ8KnON71.7YjwHajUSja4rLLYW/WwEH7uEJu', 2),
+  ('isabellar', '$2a$04$cf7yoqGITOn9ynkCPfk/g.2cyQF3INhKVVwdnFJstWvM/KClpLiIW', 2),
+  ('benjaminm', '$2a$04$ollQKS9dfx5gUfpfTmkkvubFKiTNrPLtBnWlP2FbghSLUzW3eyM0m', 2);
+-- User passwords: passwordemma, passwordliam, passwordolivia, passwordnoah, passwordava,passwordwilliam,
+--                 passwordsophia, passwordjames, passwordisabella, passwordbenjamin
   INSERT INTO loans.mailing_addresses
   (city, country, state, street, zip)
 VALUES
