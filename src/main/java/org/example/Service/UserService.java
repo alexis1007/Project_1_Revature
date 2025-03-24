@@ -6,6 +6,8 @@ import org.example.repository.UserRepository;
 import org.example.repository.UserTypeRepository;
 import org.springframework.stereotype.Service;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +39,8 @@ public class UserService implements UserServiceInterface{
         userRepository.findByUsername(user.getUsername()).ifPresent(existingUser -> {
             throw new RuntimeException("Username " + existingUser.getUsername() + " already exists");
         });
+        String hashedPassword = BCrypt.hashpw(user.getPasswordHash(), BCrypt.gensalt(4));
+        user.setPasswordHash(hashedPassword);
         return userRepository.save(user);
     }
 
@@ -74,6 +78,11 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public Optional<User> validateUser(String username, String password){
-        return userRepository.findByUsernameAndPasswordHash(username, password);
+        Optional<User> existingUser = userRepository.findByUsername(username);
+        if(existingUser.isPresent() && BCrypt.checkpw(password, existingUser.get().getPasswordHash())) {
+            return existingUser;
+        } else {
+            return Optional.empty();
+        }
     }
 }
