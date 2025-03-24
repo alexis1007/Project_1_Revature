@@ -68,8 +68,8 @@ public class LoanAppController {
         log.info("User [{}] requests to create a new loan", sessionUser.getId());
         loan.setUserProfile(sessionUser.getUserProfile());
         LoanApplication savedLoan = loanAppService.createLoan(loan);
-        log.info("Loan created by user [{}]",sessionUser.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedLoan);
+        LoanResponseDto responseDto = new LoanResponseDto(savedLoan);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     /**
