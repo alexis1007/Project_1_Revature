@@ -3,14 +3,13 @@ package org.example.config;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import jakarta.servlet.Filter;
 
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
 
     private final JwtFilter jwtFilter;
 
@@ -18,29 +17,22 @@ public class WebConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        // Apply CORS configuration through Spring MVC
+        registry.addMapping("/**")
+                .allowedOriginPatterns("http://127.0.0.1:5173", "http://localhost:5173")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
+
     @Bean
     public FilterRegistrationBean<Filter> jwtFilterRegistration() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter(jwtFilter);
-        registration.addUrlPatterns("/api/*"); // Aplica el filtro a todas las rutas de la API
-        registration.setOrder(1); // Orden de ejecución (primero)
+        registration.addUrlPatterns("/api/*"); 
+        registration.setOrder(1);
         return registration;
     }
-
-    @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*"); // Use allowedOriginPatterns instead of allowedOrigins
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(0); // Orden de ejecución (antes del filtro JWT)
-        return bean;
-    }
-
 }
