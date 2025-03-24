@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.example.DTO.LoanResponseDto;
 import org.example.Service.LoanApplicationService;
-import org.example.Service.MotivationalQuoteService;
 import org.example.model.LoanApplication;
 import org.example.model.User;
 import org.springframework.http.HttpStatus;
@@ -19,17 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/loans")
 public class LoanAppController {
     private final LoanApplicationService loanAppService;
-    private final MotivationalQuoteService motivationalQuoteService;
 
-    public LoanAppController(LoanApplicationService loanAppService, MotivationalQuoteService motivationalQuoteService) {
+    public LoanAppController(LoanApplicationService loanAppService) {
         this.loanAppService = loanAppService;
-        this.motivationalQuoteService = motivationalQuoteService;
     }
 
     /**
@@ -68,8 +64,7 @@ public class LoanAppController {
         
         loan.setUserProfile(sessionUser.getUserProfile());
         LoanApplication savedLoan = loanAppService.createLoan(loan);
-        String quote = motivationalQuoteService.getRandomQuote();
-        LoanResponseDto responseDto = new LoanResponseDto(savedLoan, quote);
+        LoanResponseDto responseDto = new LoanResponseDto(savedLoan);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
