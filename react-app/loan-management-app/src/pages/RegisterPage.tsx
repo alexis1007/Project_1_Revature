@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { registerUser } from '../services/authService';
 
 export const RegisterPage = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [roleId, setRoleId] = useState('');
   const [message, setMessage] = useState('');
@@ -11,7 +11,7 @@ export const RegisterPage = () => {
     e.preventDefault();
     try {
       const response = await registerUser({
-        username: email,
+        username: username,
         password,
         role: { roleId: parseInt(roleId) },
       });
@@ -34,18 +34,15 @@ export const RegisterPage = () => {
 
       <form className="auth-form" onSubmit={handleRegister}>
         <div className="form-group">
-          <label htmlFor="email" className="input-label">
+          <label htmlFor="username" className="input-label">
             Username
           </label>
           <input
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="form-input"
-            placeholder="Email"
-            type="email"
-            required
-            autoComplete="email"
+            placeholder="Username"
           />
         </div>
 
