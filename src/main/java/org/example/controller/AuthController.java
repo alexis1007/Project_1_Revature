@@ -3,8 +3,10 @@ package org.example.controller;
 import org.example.DTO.AuthRequest;
 import org.example.DTO.AuthResponse;
 import org.example.Service.JwtService;
+import org.example.Service.UserProfileService;
 import org.example.Service.UserService;
 import org.example.model.User;
+import org.example.model.UserProfile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +19,21 @@ import java.util.Optional;
 public class AuthController {
     private final UserService userService;
     private final JwtService jwtService;
+    private final UserProfileService userProfileService;
 
-    public AuthController(UserService userService, JwtService jwtService) {
+    public AuthController(UserService userService, UserProfileService userProfileService, JwtService jwtService) {
         this.userService = userService;
+        this.userProfileService = userProfileService;
         this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User savedUser = userService.registerUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public ResponseEntity<UserProfile> registerUser(@RequestBody UserProfile userProfile) {
+
+        User savedUser = userService.registerUser(userProfile.getUser());
+        userProfile.setUser(savedUser);
+        UserProfile savedUserProfile = userProfileService.registerUserProfile(userProfile);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserProfile);
     }
 
     @PostMapping("/login")
