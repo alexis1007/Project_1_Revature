@@ -2,7 +2,9 @@ package org.example.controller;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.Service.UserProfileService;
+import org.example.model.User;
 import org.example.model.UserProfile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,23 @@ public class UserProfileController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserProfile>> getAllUserProfiles() {
+    public ResponseEntity<List<UserProfile>> getAllUserProfiles(HttpServletRequest request) {
+        // Only manager can gat a list of all user-profiles
+        User sessionUser = (User) request.getAttribute("user");
+        if(sessionUser.getUserType().getId() != 1) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         return ResponseEntity.ok(userProfileService.findAllUserProfiles());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserProfile> getUserProfileById(@PathVariable Long id) {
+    public ResponseEntity<UserProfile> getUserProfileById(@PathVariable Long id, HttpServletRequest request) {
+        // Only manager and user itself can get user-profile information
+        User sessionUser = (User) request.getAttribute("user");
+        if(sessionUser.getUserType().getId() != 1 && sessionUser.getId() != id) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
         return userProfileService.findUserProfileById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -44,14 +57,26 @@ public class UserProfileController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserProfile> updateUserProfile(@PathVariable Long id,
-            @RequestBody UserProfile profileDetails) {
+                                                         @RequestBody UserProfile profileDetails,
+                                                         HttpServletRequest request) {
+        // Only manager and user itself can update user-profile
+        User sessionUser = (User) request.getAttribute("user");
+        if(sessionUser.getUserType().getId() != 1 && sessionUser.getId() != id) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
         return userProfileService.updateUserProfile(id, profileDetails)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserProfile(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUserProfile(@PathVariable Long id, HttpServletRequest request) {
+        // Only manager and user itself can delete a user-profile
+        User sessionUser = (User) request.getAttribute("user");
+        if(sessionUser.getUserType().getId() != 1 && sessionUser.getId() != id) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
         boolean deleted = userProfileService.deleteUserProfile(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
