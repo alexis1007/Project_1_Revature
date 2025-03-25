@@ -12,7 +12,16 @@ export const LoginPage = () => {
     try {
       const response = await loginUser({ username: username, password });
       if (!response.ok) throw new Error('Login failed');
-      navigate('/dashboard');
+
+      const data = (await response.json()) as { token: string };
+      const token = data.token;
+      if (token) {
+        // Store token securely
+        localStorage.setItem('token', token);
+        navigate('/dashboard');
+      } else {
+        throw new Error('No token received');
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error.message);
