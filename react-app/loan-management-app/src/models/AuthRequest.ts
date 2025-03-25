@@ -1,7 +1,7 @@
 import { UserType } from './UserType';
 
-export interface User {
+export interface AuthRequest {
   username: string;
-  passwordHash: string;
+  password: string;
   userType?: UserType;
 }
