@@ -2,10 +2,7 @@ package org.example.controller;
 
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
-import org.example.DTO.LoanResponseDto;
 import org.example.Service.LoanApplicationService;
-import org.example.Service.MotivationalQuoteService;
 import org.example.model.LoanApplication;
 import org.example.model.User;
 import org.slf4j.Logger;
@@ -22,18 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-@Slf4j
+
 @RestController
 @RequestMapping("/api/loans")
 public class LoanAppController {
     private static final Logger log = LoggerFactory.getLogger(LoanAppController.class);
     private final LoanApplicationService loanAppService;
-    private final MotivationalQuoteService motivationalQuoteService;
 
-    public LoanAppController(LoanApplicationService loanAppService, MotivationalQuoteService motivationalQuoteService) {
+    public LoanAppController(LoanApplicationService loanAppService) {
         this.loanAppService = loanAppService;
-        this.motivationalQuoteService = motivationalQuoteService;
     }
 
     /**
@@ -57,33 +51,29 @@ public class LoanAppController {
     }
 
     /**
-     * Creates a new task for the currently logged-in user and returns the saved
-     * task
-     * along with a motivational quote.
+     * Creates a new loan for the currently logged-in user.
      *
      * @param loan    The loan to be created.
      * @param request The HttpServletRequest containing the logged-in user.
-     * @return A TaskResponseDto wrapping the saved task and a motivational quote.
+     * @return The saved loan.
      */
     @PostMapping
-    public ResponseEntity<?> createLoan(@RequestBody LoanApplication loan, HttpServletRequest request) {
+    public ResponseEntity<LoanApplication> createLoan(@RequestBody LoanApplication loan, HttpServletRequest request) {
         User sessionUser = (User) request.getAttribute("user");
-        log.info("User [{}] requests to create a new loan", sessionUser.getId());
         if (sessionUser == null) {
-            log.warn("Access denied to user [{}]",sessionUser.getId());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
+            log.warn("Access denied - no authenticated user");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
+        log.info("User [{}] requests to create a new loan", sessionUser.getId());
         loan.setUserProfile(sessionUser.getUserProfile());
         LoanApplication savedLoan = loanAppService.createLoan(loan);
         log.info("Loan created by user [{}]",sessionUser.getId());
-        String quote = motivationalQuoteService.getRandomQuote();
-        LoanResponseDto responseDto = new LoanResponseDto(savedLoan, quote);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedLoan);
     }
 
     /**
-     * Updates an existing task.
+     * Updates an existing loan.
      */
     @PutMapping("/{id}")
     public ResponseEntity<LoanApplication> updateLoan(@PathVariable Long id,
@@ -95,12 +85,12 @@ public class LoanAppController {
     }
 
     /**
-     * Deletes a task.
+     * Deletes a loan.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {
         boolean deleted = loanAppService.deleteLoan(id);
-        log.info("Deleteing loan with id [{}]",id);
+        log.info("Deleting loan with id [{}]",id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 

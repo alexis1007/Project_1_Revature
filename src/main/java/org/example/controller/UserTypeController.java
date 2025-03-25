@@ -1,6 +1,5 @@
 package org.example.controller;
 
-
 import org.example.Service.UserTypeService;
 import org.example.model.UserType;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user_types")
-
 public class UserTypeController {
 
     private final UserTypeService userTypeService;
@@ -20,7 +18,7 @@ public class UserTypeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserType> getUserTypeById(@PathVariable Long id) {
-        return UserTypeService.findUserTypeById(id)
+        return userTypeService.findUserTypeById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -28,8 +26,7 @@ public class UserTypeController {
     @PostMapping()
     public ResponseEntity<UserType> createUserType(@RequestBody UserType userType) {
          UserType savedUserType = userTypeService.createUserType(userType);
-         return ResponseBody.status(HttpStatus.CREATED).body(savedUserType);
-
+         return ResponseEntity.status(HttpStatus.CREATED).body(savedUserType);
     }
 
     @PutMapping("/{id}")
