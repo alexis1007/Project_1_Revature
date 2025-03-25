@@ -1,27 +1,21 @@
 package org.example.controller;
 
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Optional;
+
 import org.example.Service.LoanApplicationService;
-import org.example.Service.MotivationalQuoteService;
 import org.example.model.LoanApplication;
-import org.example.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,9 +27,6 @@ public class LoanAppControllerTest {
 
     @MockBean
     private LoanApplicationService loanApplicationService;
-
-    @MockBean
-    private MotivationalQuoteService motivationalQuoteService;
 
     private LoanApplication loanApplication;
 
@@ -72,13 +63,12 @@ public class LoanAppControllerTest {
     @Test
     public void testCreateLoan() throws Exception {
         when(loanApplicationService.createLoan(any(LoanApplication.class))).thenReturn(loanApplication);
-        when(motivationalQuoteService.getRandomQuote()).thenReturn("Keep going!");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/loans")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}"))
                 .andExpect(status().isCreated())
-                .andExpect(content().json("{'loanApplication': {'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}, 'quote': 'Keep going!'}"));
+                .andExpect(content().json("{'loanApplication': {'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}}"));
     }
 
     @Test

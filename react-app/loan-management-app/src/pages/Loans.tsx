@@ -95,104 +95,129 @@ export const Loans = () => {
   return (
     <div className="main-container loans-container">
       <div className="header">
-        <h2>Loan Management</h2>
+        <h2>Loan Operations</h2>
         <button onClick={() => logoutUser().then(() => navigate('/'))}>
           Logout
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="loan-form">
-        <h3>{editingId ? 'Edit Loan' : 'New Loan'}</h3>
+      <div className="main-content-grid">
+        <div className="form-column">
+          <form onSubmit={handleSubmit} className="loan-form">
+            <h3>{editingId ? 'Edit Loan' : 'New Loan'}</h3>
 
-        <div className="form-group">
-          <label>Amount:</label>
-          <input
-            type="number"
-            value={formData.principalBalance}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                principalBalance: Number(e.target.value),
-              })
-            }
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Interest Rate:</label>
-          <input
-            type="number"
-            step="0.01"
-            value={formData.interest}
-            onChange={(e) =>
-              setFormData({ ...formData, interest: Number(e.target.value) })
-            }
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Term (months):</label>
-          <input
-            type="number"
-            value={formData.termLength}
-            onChange={(e) =>
-              setFormData({ ...formData, termLength: Number(e.target.value) })
-            }
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Type:</label>
-          <label htmlFor="loanType">Loan Type:</label>
-          <select
-            id="loanType"
-            value={formData.loanType?.id}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                loanType: {
-                  id: Number(e.target.value),
-                  loanType: e.target.selectedOptions[0].text,
-                },
-              })
-            }
-          >
-            <option value={1}>Home</option>
-            <option value={2}>Personal</option>
-            <option value={3}>Auto</option>
-          </select>
-        </div>
-
-        <button type="submit">{editingId ? 'Update' : 'Create'}</button>
-        {editingId && (
-          <button type="button" onClick={() => setEditingId(null)}>
-            Cancel
-          </button>
-        )}
-      </form>
-
-      <div className="loans-list">
-        {error && <div className="error">{error}</div>}
-
-        {loans.map((loan) => (
-          <div key={loan.id} className="loan-card">
-            <div className="loan-info">
-              <h4>{loan.loanType.loanType} Loan</h4>
-              <h5>${loan.principalBalance}</h5>
-              <p>Interest: {loan.interest}%</p>
-              <p>Term: {loan.termLength} months</p>
-              <p>
-                Status:{' '}
-                <span className={loan.applicationStatus.status}>
-                  {loan.applicationStatus.status}
-                </span>
-              </p>
+            <div className="form-group">
+              <label>Amount:</label>
+              <input
+                type="number"
+                value={formData.principalBalance}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    principalBalance: Number(e.target.value),
+                  })
+                }
+                required
+              />
             </div>
+
+            <div className="form-group">
+              <label>Interest Rate:</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.interest}
+                onChange={(e) =>
+                  setFormData({ ...formData, interest: Number(e.target.value) })
+                }
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Term (months):</label>
+              <input
+                type="number"
+                value={formData.termLength}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    termLength: Number(e.target.value),
+                  })
+                }
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Type:</label>
+              <label htmlFor="loanType">Loan Type:</label>
+              <select
+                id="loanType"
+                value={formData.loanType?.id}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    loanType: {
+                      id: Number(e.target.value),
+                      loanType: e.target.selectedOptions[0].text,
+                    },
+                  })
+                }
+              >
+                <option value={1}>Home</option>
+                <option value={2}>Personal</option>
+                <option value={3}>Auto</option>
+              </select>
+            </div>
+
+            <button type="submit">{editingId ? 'Update' : 'Create'}</button>
+            {editingId && (
+              <button type="button" onClick={() => setEditingId(null)}>
+                Cancel
+              </button>
+            )}
+          </form>
+        </div>
+
+        <div className="loans-column">
+          <h3>Existing Loans</h3>
+          <h4 className="loans-count">Total Loans: {loans.length}</h4>
+          <div className="loans-list">
+            {error && <div className="error">{error}</div>}
+
+            {loans.map((loan) => (
+              <div key={loan.id} className="loan-card">
+                <div className="loan-info">
+                  <h4>{loan.loanType.loanType} Loan</h4>
+                  <h5>${loan.principalBalance}</h5>
+                  <p>Interest: {loan.interest}%</p>
+                  <p>Term: {loan.termLength} months</p>
+                  <p>
+                    Status:{' '}
+                    <span className={loan.applicationStatus.status}>
+                      {loan.applicationStatus.status}
+                    </span>
+                  </p>
+                </div>
+                <div className="loan-actions">
+                  <button
+                    className="edit-button"
+                    onClick={() => startEdit(loan)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(loan.id!)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

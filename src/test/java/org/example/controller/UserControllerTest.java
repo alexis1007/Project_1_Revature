@@ -1,27 +1,29 @@
 package org.example.controller;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.example.Service.UserService;
 import org.example.model.User;
 import org.example.model.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -89,10 +91,16 @@ public class UserControllerTest {
     public void testUpdateUser() throws Exception {
         when(userService.updateUser(any(Long.class), any(User.class))).thenReturn(Optional.of(user));
 
+        // Create a user with MANAGER privileges (userType.getId() == 1)
+        User managerUser = new User();
+        managerUser.setId(1L);
+        managerUser.setUsername("manageruser");
+        managerUser.setUserType(userType); // Already set up as MANAGER in setUp()
+
         mockMvc.perform(put("/api/users/1")
+                .requestAttr("user", managerUser) // Use manager user for authorization
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"updateduser\", \"passwordHash\": \"newpassword\", \"userType\": {\"id\": 1}}")
-                .requestAttr("user", user))
+                .content("{\"username\": \"updateduser\", \"passwordHash\": \"newpassword\", \"userType\": {\"id\": 1}}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("testuser"));
     }
