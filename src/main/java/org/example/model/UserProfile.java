@@ -1,15 +1,11 @@
 package org.example.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user_profiles", schema = "loans")
@@ -43,10 +39,13 @@ public class UserProfile {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "userProfile", cascade = CascadeType.ALL)
+    private List<LoanApplication> loanApplications = new ArrayList<>();
+
     // Default constructor
     public UserProfile() {}
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -111,15 +110,11 @@ public class UserProfile {
         this.birthDate = birthDate;
     }
 
-    @Override
-    public String toString() {
-        return "UserProfile{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", creditScore=" + creditScore +
-                ", birthDate=" + birthDate +
-                '}';
+    public List<LoanApplication> getLoanApplications() {
+        return loanApplications;
+    }
+
+    public void setLoanApplications(List<LoanApplication> loanApplications) {
+        this.loanApplications = loanApplications;
     }
 }

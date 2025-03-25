@@ -3,6 +3,7 @@ package org.example.controller;
 import java.util.List;
 
 import org.example.Service.LoanApplicationService;
+import org.example.Service.UserProfileService;
 import org.example.model.LoanApplication;
 import org.example.model.User;
 import org.slf4j.Logger;
@@ -25,9 +26,11 @@ import jakarta.servlet.http.HttpServletRequest;
 public class LoanAppController {
     private static final Logger log = LoggerFactory.getLogger(LoanAppController.class);
     private final LoanApplicationService loanAppService;
+    private final UserProfileService userProfileService;
 
-    public LoanAppController(LoanApplicationService loanAppService) {
+    public LoanAppController(LoanApplicationService loanAppService, UserProfileService userProfileService) {
         this.loanAppService = loanAppService;
+        this.userProfileService = userProfileService;
     }
 
     /**
@@ -37,6 +40,12 @@ public class LoanAppController {
     public ResponseEntity<List<LoanApplication>> getAllLoans() {
         log.info("Request all loans");
         return ResponseEntity.ok(loanAppService.findAllLoans());
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<LoanApplication>> getAllLoans(@PathVariable Long id) {
+        log.info("Request all loans by user");
+        return ResponseEntity.ok(userProfileService.findUserProfileById(id).get().getLoanApplications());
     }
 
     /**
