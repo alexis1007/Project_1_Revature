@@ -1,12 +1,14 @@
 package org.example.DTO;
 
+import org.example.model.User;
+
 public class AuthResponse {
     private String token;
-    private String userType;
+    private User user;
 
-    public AuthResponse(String token, String userType) {
+    public AuthResponse(String token, User user) {
         this.token = token;
-        this.userType = userType;
+        this.user = user;
     }
 
     public String getToken() {
@@ -17,11 +19,11 @@ public class AuthResponse {
         this.token = token;
     }
 
-    public String getUserType() {
-        return userType;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setUser(String userType) {
+        this.user = user;
     }
 }

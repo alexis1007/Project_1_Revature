@@ -31,7 +31,7 @@ public class WebConfig {
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        config.addAllowedOriginPattern("*"); // Use allowedOriginPatterns instead of allowedOrigins
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
@@ -42,4 +42,5 @@ public class WebConfig {
         bean.setOrder(0); // Orden de ejecución (antes del filtro JWT)
         return bean;
     }
+
 }
