@@ -2,8 +2,6 @@ package org.example.controller;
 
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.example.Service.UserProfileService;
 import org.example.model.User;
 import org.example.model.UserProfile;
@@ -19,7 +17,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-@Slf4j
+
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/user-profiles")
 public class UserProfileController {
