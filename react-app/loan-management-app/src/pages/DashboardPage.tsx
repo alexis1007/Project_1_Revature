@@ -27,16 +27,14 @@ export const DashboardPage = () => {
   const handleAddLoan = async () => {
     const loan: Loan = {
       id: 0, // Provide a default or generated ID
-      principal_balance: 0, // Default value
+      principalBalance: 0, // Default value
       interest: 0, // Default value
-      term_length: 0, // Default value
-      total_balance: 0, // Default value
-      applicationStatus: { application_statuses_id: 1 },
-      loanType: {
-        loan_type_id: 0,
-      },
+      termLength: 0, // Default value
+      totalBalance: 0, // Default value
+      applicationStatus: { id: 1, status:"pending" },
+      loanType: {id: 1, loanType: "Home"},
       userProfile: {
-        user_profiles_id: 0,
+        id: 0,
       },
     };
     await addLoan(loan);
@@ -101,14 +99,14 @@ export const DashboardPage = () => {
           {loans.map((loan, i) => (
             <li key={i} className="loan-item">
               <div className="loan-content">
-                <h4 className="loan-title">loan.id</h4>
-                <p className="loan-description">loan.principal_balance</p>
-                <p className="loan-description">loan.interest</p>
-                <p className="loan-description">loan.term_length</p>
-                <p className="loan-description">loan.total_balance</p>
-                <p className="loan-description">
-                  loan.applicationStatus.application_statuses_id
-                </p>
+                <h4 className="loan-title">ID: {loan.id}</h4>
+                <p className="loan-description">Principal balance: {loan.principalBalance}</p>
+                <p className="loan-description">Interest: {loan.interest}</p>
+                <p className="loan-description">Term: {loan.termLength}</p>
+                <p className="loan-description">Total balance: {loan.totalBalance}</p>
+                <p className="loan-description">Application status: {loan.applicationStatus.status}</p>
+                <p className="loan-description">Type: {loan.loanType.loanType}</p>
+                <p className="loan-description">User profile ID: {loan.userProfile.id}</p>
 
                 {/* {loan.interest && (
                   <p className="loan-due-date">
