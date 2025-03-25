@@ -1,10 +1,10 @@
 export interface Loan {
   id: number;
-  principal_balance: number;
+  principalBalance: number;
   interest: number;
-  term_length: number;
-  total_balance: number;
-  applicationStatus: { application_statuses_id: number };
-  loanType: { loan_type_id: number };
-  userProfile: { user_profiles_id: number };
+  termLength: number;
+  totalBalance: number;
+  applicationStatus: { id: number, status: string };
+  loanType: { id: number, loanType: string };
+  userProfile: { id: number };
 }

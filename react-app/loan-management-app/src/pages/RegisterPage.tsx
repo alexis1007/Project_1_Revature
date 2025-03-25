@@ -4,16 +4,18 @@ import { registerUser } from '../services/authService';
 export const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [roleId, setRoleId] = useState('');
+  const [id, setUserTypeId] = useState('');
   const [message, setMessage] = useState('');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await registerUser({
-        username: username,
-        password,
-        role: { roleId: parseInt(roleId) },
+        user: {
+          username: username,
+          passwordHash: password,
+          userType: { id: parseInt(id) },
+        }
       });
       if (!response.ok) throw new Error('Registration failed');
       setMessage('Registration successful!');
@@ -63,15 +65,15 @@ export const RegisterPage = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="roleId" className="input-label">
-            Role ID
+          <label htmlFor="userTypeId" className="input-label">
+            User Type ID
           </label>
           <input
-            id="roleId"
-            value={roleId}
-            onChange={(e) => setRoleId(e.target.value)}
+            id="id"
+            value={id}
+            onChange={(e) => setUserTypeId(e.target.value)}
             className="form-input"
-            placeholder="Role ID"
+            placeholder="User Type ID"
             type="number"
             required
           />
