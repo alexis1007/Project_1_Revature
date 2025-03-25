@@ -19,25 +19,25 @@ public class MailingAddressService implements MailingAddressInterface {
         this.mailingAddressRepository = mailingAddressRepository;
     }
 
-    // Obtener todas las direcciones de envío
+    // Getting all directions
     @Override
     public List<MailingAddress> findAllAddresses() {
         return mailingAddressRepository.findAll();
     }
 
-    // Obtener una dirección por ID
+    // Getting address by id
     @Override
     public Optional<MailingAddress> findAddressById(Long id) {
         return mailingAddressRepository.findById(id);
     }
 
-    // Crear una nueva dirección
+    // Creating new Address
     @Override
     public MailingAddress createAddress(MailingAddress mailingAddress) {
         return mailingAddressRepository.save(mailingAddress);
     }
 
-    // Actualizar una dirección existente
+    // Updating Address
     @Override
     public Optional<MailingAddress> updateAddress(Long id, MailingAddress mailingAddress) {
         return mailingAddressRepository.findById(id).map(existingAddress -> {
