@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './Layout';
-import { LoginPage } from './pages/LoginPage';
-import { RegisterPage } from './pages/RegisterPage';
+import { LoginPage } from './auth/LoginPage';
+import { RegisterPage } from './auth/RegisterPage';
+import { Loans } from './pages/Loans';
 import { DashboardPage } from './pages/DashboardPage';
 
 const App = () => (
@@ -11,6 +12,7 @@ const App = () => (
         <Route index element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="loans" element={<Loans />} />
       </Route>
     </Routes>
   </Router>

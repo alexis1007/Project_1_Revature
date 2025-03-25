@@ -11,10 +11,14 @@
             "id": "feb99d168c32aeab",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "project-1-guidelines.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "project-1-guidelines"
             }
           }
         ]
@@ -164,19 +168,20 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "feb99d168c32aeab",
+  "active": "876e8d729f0e307f",
   "lastOpenFiles": [
-    "target/classes/org/example/repository/UserProfileRepository.class",
-    "target/classes/org/example/Service/UserProfileService.class",
-    "target/classes/org/example/Service/UserProfileServiceInterface.class",
-    "src/main/java/org/example/repository/UserProfileRepository.java",
-    "src/main/java/org/example/Service/UserProfileServiceInterface.java",
-    "src/main/java/org/example/Service/UserProfileService.java",
-    "target/classes/org/example/Service/AuthService.class",
-    "src/main/java/org/example/Service/AuthService.java",
-    "target/classes/org/example/model/UserProfile.class",
-    "src/main/java/org/example/model/UserProfile.java",
-    "target/classes/org/example/controller/AuthController.class",
+    "react-app/loan-management-app/src/pages/Pages.tsx",
+    "react-app/loan-management-app/src/pages/DashboardPage.tsx",
+    "react-app/loan-management-app/src/DashboardPage.tsx",
+    "react-app/loan-management-app/src/Dashboard.tsx",
+    "react-app/loan-management-app/src/dashboard.tsx",
+    "react-app/loan-management-app/src/pages/Loans.tsx",
+    "react-app/loan-management-app/src/pages/LoansPage.tsx",
+    "react-app/loan-management-app/src/auth/RegisterPage.tsx",
+    "react-app/loan-management-app/src/auth/LoginPage.tsx",
+    "react-app/loan-management-app/src/auth",
+    "target/classes/org/example/repository/UserTypeRepository.class",
+    "project-0-guidelines.md",
     "Daily Standups (SCRUM)/DS-01.md",
     "Daily Standups (SCRUM)/Day-01.md",
     "Daily Standups (SCRUM)/template.md",
