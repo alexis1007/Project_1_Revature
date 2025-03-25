@@ -47,6 +47,14 @@ public class ApplicationStatus{
         this.description = description;
     }
 
+    public String getApplicationStatus() {
+        return this.status;
+    }
+
+    public void setApplicationStatus(String applicationStatus) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "ApplicationStatus{" +
@@ -55,4 +63,6 @@ public class ApplicationStatus{
                 ", description='" + description + '\'' +
                 '}';
     }
+
+
 }
