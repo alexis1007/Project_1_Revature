@@ -7,4 +7,3 @@ import java.util.List;
 
 public interface ApplicationStatusRepository extends JpaRepository<ApplicationStatus, Long>{
 }
-

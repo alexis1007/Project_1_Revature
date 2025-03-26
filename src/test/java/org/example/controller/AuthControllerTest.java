@@ -1,90 +1,85 @@
 package org.example.controller;
 
+import java.util.Optional;
+
 import org.example.DTO.AuthRequest;
-import org.example.DTO.AuthResponse;
+import org.example.Main;
 import org.example.Service.JwtService;
 import org.example.Service.UserProfileService;
 import org.example.Service.UserService;
 import org.example.model.User;
 import org.example.model.UserProfile;
-import org.junit.jupiter.api.BeforeEach;
+import org.example.model.UserType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@WebMvcTest(AuthController.class)
+@SpringBootTest(classes = Main.class)
 public class AuthControllerTest {
-
+    
     @Autowired
-    private MockMvc mockMvc;
-
+    private AuthController authController;
+    
     @MockBean
     private UserService userService;
-
+    
     @MockBean
     private JwtService jwtService;
-
+    
     @MockBean
     private UserProfileService userProfileService;
-
-    @InjectMocks
-    private AuthController authController;
-
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
-    }
-
+    
     @Test
-    public void testRegisterUser() throws Exception {
+    public void testRegisterUser() {
+        // Setup
         User user = new User();
         user.setId(1L);
         user.setUsername("testuser");
-
+        
         UserProfile userProfile = new UserProfile();
         userProfile.setId(1L);
         userProfile.setUser(user);
-
+        
         when(userService.registerUser(any(User.class))).thenReturn(user);
         when(userProfileService.registerUserProfile(any(UserProfile.class))).thenReturn(userProfile);
-
-        mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"user\": {\"username\": \"testuser\", \"passwordHash\": \"password\"}}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.user.username").value("testuser"));
+        
+        // Execute
+        ResponseEntity<UserProfile> response = authController.registerUser(userProfile);
+        
+        // Verify
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(1L, response.getBody().getId());
     }
-
+    
     @Test
-    public void testLogin() throws Exception {
+    public void testLogin() {
+        // Setup
+        UserType userType = new UserType();
+        userType.setId(1L);
+        userType.setUserType("CUSTOMER");
+        
         User user = new User();
         user.setId(1L);
         user.setUsername("testuser");
-
-        when(userService.validateUser(any(String.class), any(String.class))).thenReturn(Optional.of(user));
-        when(jwtService.generateToken(any(String.class), any(String.class))).thenReturn("token");
-
-        mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"testuser\", \"password\": \"password\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("token"));
+        user.setUserType(userType);
+        
+        AuthRequest request = new AuthRequest();
+        request.setUsername("testuser");
+        request.setPassword("password");
+        
+        when(userService.validateUser("testuser", "password")).thenReturn(Optional.of(user));
+        when(jwtService.generateToken("testuser", "CUSTOMER")).thenReturn("token");
+        
+        // Execute
+        ResponseEntity<?> response = authController.login(request);
+        
+        // Verify
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }

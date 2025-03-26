@@ -1,5 +1,7 @@
 package org.example.controller;
 
+import java.util.Optional;
+
 import org.example.DTO.AuthRequest;
 import org.example.DTO.AuthResponse;
 import org.example.Service.JwtService;
@@ -11,9 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,14 +51,12 @@ public class AuthController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             log.info("Loggin success");
-            String token = jwtService.generateToken(
-                user.getUsername(), 
-                user.getUserType().getUserType()
-            );
+            String userType = (user.getUserType() != null) ? user.getUserType().getUserType() : "DEFAULT";
+            String token = jwtService.generateToken(user.getUsername(), userType);
             return ResponseEntity.ok(new AuthResponse(token, user));
         } else {
             log.warn("Logging failed");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
 
