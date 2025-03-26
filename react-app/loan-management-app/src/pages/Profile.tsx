@@ -158,7 +158,7 @@ export const UserProfiles = () => {
                 </div>
                 <div className="userProfile-actions">
                   <button
-                    className="edit-button"
+                    className="buttons edit-button"
                     onClick={() => startEdit(userProfile)}
                   >
                     Edit
