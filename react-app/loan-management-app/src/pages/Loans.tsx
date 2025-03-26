@@ -93,17 +93,17 @@ export const Loans = () => {
   };
 
   return (
-    <div className="main-container loans-container">
+    <div className="main-container entity-container">
       <div className="header">
         <h2>Loan Operations</h2>
-        <button onClick={() => logoutUser().then(() => navigate('/'))}>
+        <button className='logout-button' onClick={() => logoutUser().then(() => navigate('/'))}>
           Logout
         </button>
       </div>
 
       <div className="main-content-grid">
         <div className="form-column">
-          <form onSubmit={handleSubmit} className="loan-form">
+          <form onSubmit={handleSubmit} className="entity-form">
             <h3>{editingId ? 'Edit Loan' : 'New Loan'}</h3>
 
             <div className="form-group">
@@ -183,12 +183,12 @@ export const Loans = () => {
         <div className="loans-column">
           <h3>Existing Loans</h3>
           <h4 className="loans-count">Total Loans: {loans.length}</h4>
-          <div className="loans-list">
+          <div className="entity-list">
             {error && <div className="error">{error}</div>}
 
             {loans.map((loan) => (
-              <div key={loan.id} className="loan-card">
-                <div className="loan-info">
+              <div key={loan.id} className="entity-card">
+                <div className="entity-info">
                   <h4>{loan.loanType.loanType} Loan</h4>
                   <h5>${loan.principalBalance}</h5>
                   <p>Interest: {loan.interest}%</p>
@@ -200,7 +200,7 @@ export const Loans = () => {
                     </span>
                   </p>
                 </div>
-                <div className="loan-actions">
+                <div className="entity-actions">
                   <button
                     className="edit-button"
                     onClick={() => startEdit(loan)}
