@@ -1,7 +1,5 @@
 package org.example.controller;
 
-import org.example.DTO.AuthRequest;
-import org.example.DTO.AuthResponse;
 import org.example.Service.JwtService;
 import org.example.Service.UserProfileService;
 import org.example.Service.UserService;
