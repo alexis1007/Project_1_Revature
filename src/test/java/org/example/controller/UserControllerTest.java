@@ -17,10 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcBuilders.put;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -60,7 +57,7 @@ public class UserControllerTest {
     public void testGetAllUsers() throws Exception {
         when(userService.findAllUsers()).thenReturn(Arrays.asList(user));
 
-        mockMvc.perform(get("/api/users")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
                 .requestAttr("user", user))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].username").value("testuser"));
@@ -70,7 +67,7 @@ public class UserControllerTest {
     public void testGetUserById() throws Exception {
         when(userService.findUserById(any(Long.class))).thenReturn(Optional.of(user));
 
-        mockMvc.perform(get("/api/users/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/1")
                 .requestAttr("user", user))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("testuser"));
@@ -80,7 +77,7 @@ public class UserControllerTest {
     public void testRegisterUser() throws Exception {
         when(userService.registerUser(any(User.class))).thenReturn(user);
 
-        mockMvc.perform(post("/api/users")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\": \"testuser\", \"passwordHash\": \"password\", \"userType\": {\"id\": 1}}"))
                 .andExpect(status().isCreated())
@@ -97,7 +94,7 @@ public class UserControllerTest {
         managerUser.setUsername("manageruser");
         managerUser.setUserType(userType); // Already set up as MANAGER in setUp()
 
-        mockMvc.perform(put("/api/users/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/1")
                 .requestAttr("user", managerUser) // Use manager user for authorization
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\": \"updateduser\", \"passwordHash\": \"newpassword\", \"userType\": {\"id\": 1}}"))
@@ -109,7 +106,7 @@ public class UserControllerTest {
     public void testDeleteUser() throws Exception {
         when(userService.deleteUser(any(Long.class))).thenReturn(true);
 
-        mockMvc.perform(delete("/api/users/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/1")
                 .requestAttr("user", user))
                 .andExpect(status().isNoContent());
     }
