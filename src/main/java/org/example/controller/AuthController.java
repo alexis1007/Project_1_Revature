@@ -51,7 +51,7 @@ public class AuthController {
                 user.getUsername(), 
                 user.getUserType().getUserType()
             );
-            return ResponseEntity.ok(new AuthResponse(token, user.getUserType().getUserType()));
+            return ResponseEntity.ok(new AuthResponse(token, user));
         } else {
             log.warn("Logging failed");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials");

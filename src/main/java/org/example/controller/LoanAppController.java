@@ -3,6 +3,7 @@ package org.example.controller;
 import java.util.List;
 
 import org.example.Service.LoanApplicationService;
+import org.example.Service.UserProfileService;
 import org.example.model.LoanApplication;
 import org.example.model.User;
 import org.slf4j.Logger;
@@ -26,8 +27,12 @@ public class LoanAppController {
     private static final Logger log = LoggerFactory.getLogger(LoanAppController.class);
     private final LoanApplicationService loanAppService;
 
-    public LoanAppController(LoanApplicationService loanAppService) {
+    private final UserProfileService userProfileService;
+
+    public LoanAppController(LoanApplicationService loanAppService, UserProfileService userProfileService) {
         this.loanAppService = loanAppService;
+        this.userProfileService = userProfileService;
+
     }
 
     /**
@@ -37,6 +42,12 @@ public class LoanAppController {
     public ResponseEntity<List<LoanApplication>> getAllLoans() {
         log.info("Request all loans");
         return ResponseEntity.ok(loanAppService.findAllLoans());
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<LoanApplication>> getAllLoans(@PathVariable Long id) {
+        log.info("Request all loans by user");
+        return ResponseEntity.ok(userProfileService.findUserProfileById(id).get().getLoanApplications());
     }
 
     /**
@@ -68,8 +79,10 @@ public class LoanAppController {
         log.info("User [{}] requests to create a new loan", sessionUser.getId());
         loan.setUserProfile(sessionUser.getUserProfile());
         LoanApplication savedLoan = loanAppService.createLoan(loan);
+
         log.info("Loan created by user [{}]",sessionUser.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedLoan);
+
     }
 
     /**

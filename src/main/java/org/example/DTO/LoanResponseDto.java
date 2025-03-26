@@ -4,11 +4,9 @@ import org.example.model.LoanApplication;
 
 public class LoanResponseDto {
     private LoanApplication loanApplication;
-    private String motivationalQuote = "";
 
-    public LoanResponseDto(LoanApplication loanApplication, String motivationalQuote) {
+    public LoanResponseDto(LoanApplication loanApplication) {
         this.loanApplication = loanApplication;
-        this.motivationalQuote = motivationalQuote;
     }
 
     public LoanApplication getLoan() {
@@ -18,13 +16,4 @@ public class LoanResponseDto {
     public void setLoan(LoanApplication loanApplication) {
         this.loanApplication = loanApplication;
     }
-
-    public String getMotivationalQuote() {
-        return motivationalQuote;
-    }
-
-    public void setMotivationalQuote(String motivationalQuote) {
-        this.motivationalQuote = motivationalQuote;
-    }
-
 }
