@@ -13,9 +13,9 @@ const getUser = () => localStorage.getItem('user');
 export const UserProfiles = () => {
   const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
   const [formData, setFormData] = useState<Partial<UserProfile>>({
-    user: { username: 'default', passwordHash: 'defaultpass' },
+    //user: {username: "default", passwordHash: "defaultpass"},
     // mailingAddress?: { id: 1},
-    // firstName?: string;
+    //firstName: "first",
     // lastName?: string;
     // phoneNumber?: string;
     // creditScore?: number;
@@ -36,21 +36,18 @@ export const UserProfiles = () => {
   const fetchUserProfiles = async () => {
     try {
       const user = JSON.parse(getUser() || '{}');
-      if (user.userType.id == 1) {
+      if(user.userType.id == 1) {
         const data = await getUsersProfiles();
         setUserProfiles(data);
-      } else {
+    }
+      else {
         const data = await getUsersProfileById(user.id);
         setUserProfiles([data]);
-      }
+    }
+
     } catch (err) {
       setError('Failed to fetch user profiles');
     }
-  };
-
-  const startEdit = (userProfile: UserProfile) => {
-    setEditingId(userProfile.id!);
-    setFormData(userProfile);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,17 +58,27 @@ export const UserProfiles = () => {
       }
       setEditingId(null);
       setFormData({
-        user: { username: 'default', passwordHash: 'defaultpass' },
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        // applicationStatus: { id: 1, status: 'pending' },
+        // loanType: { id: 1, loanType: 'Home' },
       });
       await fetchUserProfiles();
     } catch (err) {
-      setError('Failed to save user profile');
+      setError('Failed to save loan');
     }
   };
 
+  const startEdit = (userProfile: UserProfile) => {
+    setEditingId(userProfile.id!);
+    setFormData(userProfile);
+  };
+
   return (
-    <div className="main-container entity-container">
+    <div className="main-container userProfile-container">
       <div className="header">
+
         <button
           className="buttons dashboard-button"
           onClick={() =>
@@ -93,93 +100,102 @@ export const UserProfiles = () => {
         </div>
       </div>
 
-      {editingId && (
-        <form onSubmit={handleSubmit} className="entity-form">
-          <h3>Edit Profile</h3>
+      <div className="main-content-grid">
+        {/* ----------------------------------------- */}
+        {editingId &&
+        <div className="form-column">
+          <form onSubmit={handleSubmit} className="loan-form">
+            <h3>{editingId ? 'Edit UserProfile' : 'New userProfile'}</h3>
 
-          <div className="form-group">
-            <label>First Name:</label>
-            <input
-              type="text"
-              value={formData.firstName || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  firstName: e.target.value,
-                })
-              }
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Last Name:</label>
-            <input
-              type="text"
-              value={formData.lastName || ''}
-              onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
-              }
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Phone Number:</label>
-            <input
-              type="text"
-              value={formData.phoneNumber || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  phoneNumber: e.target.value,
-                })
-              }
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Credit Score:</label>
-            <input
-              type="number"
-              value={formData.creditScore || ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  creditScore: Number(e.target.value),
-                })
-              }
-            />
-          </div>
-
-          <button type="submit">Update</button>
-          <button type="button" onClick={() => setEditingId(null)}>
-            Cancel
-          </button>
-        </form>
-      )}
-
-      <div className="entity-list">
-        {error && <div className="error">{error}</div>}
-
-        {userProfiles.map((userProfile) => (
-          <div key={userProfile.id} className="entity-card">
-            <div className="entity-info">
-              <h4>
-                {userProfile.firstName} {userProfile.lastName}
-              </h4>
-              <p>Phone number: {userProfile.phoneNumber}</p>
-              <p>Credit score: {userProfile.creditScore}</p>
+            <div className="form-group">
+              <label>First name:</label>
+              <input
+                type="text"
+                value={formData.firstName}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    firstName: e.target.value,
+                  })
+                }
+                required
+              />
             </div>
-            <div className="entity-actions">
-              <button
-                className="edit-button"
-                onClick={() => startEdit(userProfile)}
-              >
-                Edit Profile
+
+            <div className="form-group">
+              <label>Last name:</label>
+              <input
+                type="text"
+                step="0.01"
+                value={formData.lastName}
+                onChange={(e) =>
+                  setFormData({
+                     ...formData,
+                     lastName: e.target.value
+                    })
+                }
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Phone number:</label>
+              <input
+                type="text"
+                value={formData.phoneNumber}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    phoneNumber: e.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+
+            <button type="submit">{editingId ? 'Update' : 'Create'}</button>
+            {editingId && (
+              <button type="button" onClick={() => setEditingId(null)}>
+                Cancel
               </button>
-            </div>
+            )}
+          </form>
+        </div>
+        }
+{/* ------------------------------ */}
+        <div className="userProfile-column">
+          <h3>User Profile information</h3>
+          <div className="userProfile-list">
+            {error && <div className="error">{error}</div>}
+
+            {userProfiles.map((userProfile) => (
+              <div key={userProfile.id} className="userProfile-card">
+                <div className="userProfile-info">
+                  <h4>User profile: {userProfile.firstName} {userProfile.lastName}</h4>
+                  <h5>Username: {userProfile.user?.username}</h5>
+                  <p>Phone number: {userProfile.phoneNumber}</p>
+                  <p>Credit score: {userProfile.creditScore}</p>
+                </div>
+                <div className="userProfile-actions">
+                  <button
+                    className="buttons edit-button"
+                    onClick={() => startEdit(userProfile)}
+                  >
+                    Edit
+                  </button>
+                  {/* <button
+                    className="delete-button"
+                    onClick={() => handleDelete(userProfile.id!)}
+                  >
+                    Delete
+                  </button> */}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
 };
+

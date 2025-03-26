@@ -236,7 +236,8 @@ input[type='number']::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.loans-container {
+.loans-container,
+.userProfile-container {
   max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
@@ -370,27 +371,33 @@ input[type='number']::-webkit-inner-spin-button {
 .nav-button:hover {
   background-color: var(--danger-dark);
 }
+/* ---------------------------------UserProfile---------------------------- */
 
-.loans-container {
+/* ------------------------------------------------------------------------ */
+.loans-container,
+.userProfile-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.loans-container .header {
+.loans-container .header
+.userProfile-container .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-.loans-container .header h2 {
+.loans-container .header h2,
+.userProfile-container .header h2 {
   font-size: 1.75rem;
   color: #1e293b;
   margin: 0;
 }
 
-.loans-container .header button {
+.loans-container .header button,
+.userProfile-container .header button {
   padding: 0.5rem 1rem;
   background-color: var(--danger);
   color: white;
@@ -401,7 +408,8 @@ input[type='number']::-webkit-inner-spin-button {
   transition: background-color 0.2s ease;
 }
 
-.loans-container .header button:hover {
+.loans-container .header button:hover,
+.userProfile-container .header button:hover {
   background-color: var(--danger-dark);
 }
 
@@ -468,26 +476,30 @@ input[type='number']::-webkit-inner-spin-button {
   background-color: #475569;
 }
 
-.loans-list {
+.loans-list,
+.userProfile-list {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
-.loan-card {
+.loan-card,
+.userProfile-card {
   background: white;
   border-radius: 0.5rem;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.loan-info h4 {
+.loan-info h4,
+.userProfile-info h4 {
   margin: 0 0 0.5rem 0;
   color: #1e293b;
   font-size: 1.1rem;
 }
 
-.loan-info p {
+.loan-info p,
+.userProfile-info p {
   margin: 0.25rem 0;
   color: #64748b;
 }
@@ -522,7 +534,8 @@ input[type='number']::-webkit-inner-spin-button {
     padding: 1rem;
   }
 
-  .loans-list {
+  .loans-list,
+  .userProfile-list {
     grid-template-columns: 1fr;
   }
 
@@ -622,7 +635,8 @@ input[type='number']::-webkit-inner-spin-button {
   background-color: #475569;
 }
 
-.loan-actions {
+.loan-actions,
+.userProfile-actions {
   display: flex;
   margin-top: 1rem;
 }
@@ -639,23 +653,27 @@ input[type='number']::-webkit-inner-spin-button {
   grid-column: 1;
 }
 
-.loans-column {
+.loans-column,
+.userProfile-column {
   grid-column: 2;
 }
 
-.loans-column h3 {
+.loans-column h3,
+.userProfile-column h3 {
   font-size: 1.25rem;
   color: #1e293b;
   margin-bottom: 1.5rem;
 }
 
-.loans-list {
+.loans-list,
+.userProfile-list {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-.loan-card {
+.loan-card,
+.userProfile-card {
   flex: 0 0 calc(50% - 1rem);
   max-width: calc(50% - 1rem);
   background: white;
@@ -666,7 +684,8 @@ input[type='number']::-webkit-inner-spin-button {
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {
-  .loan-card {
+  .loan-card,
+  .userProfile-card {
     flex: 0 0 calc(100% - 1rem);
     max-width: calc(100% - 1rem);
   }
@@ -678,7 +697,8 @@ input[type='number']::-webkit-inner-spin-button {
   }
 
   .form-column,
-  .loans-column {
+  .loans-column,
+  .userProfile-column {
     grid-column: 1;
   }
 
@@ -686,7 +706,8 @@ input[type='number']::-webkit-inner-spin-button {
     padding: 1rem;
   }
 
-  .loans-list {
+  .loans-list,
+  .userProfile-list {
     flex-direction: column;
   }
 }
