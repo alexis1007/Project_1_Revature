@@ -1,11 +1,7 @@
 package org.example.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mailing_addresses", schema = "loans")
@@ -29,6 +25,18 @@ public class MailingAddress {
 
     @Column(name = "country", length = 45)
     private String country;
+
+    @OneToOne(mappedBy = "mailingAddress")
+    @JsonIgnore
+    private UserProfile userProfile = new UserProfile();
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
 
     public MailingAddress() {
     }

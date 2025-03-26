@@ -1,6 +1,8 @@
 package org.example.Service;
 
+import org.example.model.LoanApplication;
 import org.example.model.LoanType;
+import org.example.repository.LoanAppRepository;
 import org.example.repository.LoanTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +13,12 @@ import java.util.Optional;
 public class LoanTypeService implements LoanTypeInterface{
 
     private final LoanTypeRepository loanTypeRepository;
+
+    private final LoanAppRepository loanAppRepository;
     @Autowired
-    public LoanTypeService(LoanTypeRepository loanTypeRepository) {
+    public LoanTypeService(LoanTypeRepository loanTypeRepository, LoanAppRepository loanAppRepository) {
         this.loanTypeRepository = loanTypeRepository;
+        this.loanAppRepository = loanAppRepository;
     }
 
 
@@ -42,9 +47,21 @@ public class LoanTypeService implements LoanTypeInterface{
 
     @Override
     public boolean deleteLoanType(Long id) {
-        return loanTypeRepository.findById(id).map(loanType -> {
+        Optional<LoanType> optionalLoanType = loanTypeRepository.findById(id);
+
+        if (optionalLoanType.isPresent()) {
+            LoanType loanType = optionalLoanType.get();
+
+            // Desvincula este LoanType de los LoanApplications relacionados
+            for (LoanApplication app : loanType.getLoanApplications()) {
+                app.setLoanType(null);
+                loanAppRepository.save(app);
+            }
+
             loanTypeRepository.delete(loanType);
             return true;
-        }).orElse(false);
+        }
+
+        return false;
     }
 }

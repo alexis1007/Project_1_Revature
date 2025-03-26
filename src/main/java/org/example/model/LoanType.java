@@ -1,11 +1,10 @@
 package org.example.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "loan_type", schema = "loans")
@@ -18,6 +17,18 @@ public class LoanType {
 
     @Column(name = "loan_type", length = 10, unique = true)
     private String loanType;
+
+    @OneToMany(mappedBy = "loanType")
+    @JsonIgnore
+    private List<LoanApplication> loanApplications = new ArrayList<>();
+
+    public List<LoanApplication> getLoanApplications() {
+        return loanApplications;
+    }
+
+    public void setLoanApplications(List<LoanApplication> loanApplications) {
+        this.loanApplications = loanApplications;
+    }
 
     public LoanType() {
     }
