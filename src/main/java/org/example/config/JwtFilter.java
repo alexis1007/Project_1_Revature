@@ -40,7 +40,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Skip filter for public URLs
         String path = request.getRequestURI();
+
+        System.out.println("Request path: " + path);
+        System.out.println("HTTP Method: " + request.getMethod());
+
         if (PUBLIC_URLS.stream().anyMatch(path::startsWith)) {
+            System.out.println("Public URL, skipping filter.");
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,18 +56,23 @@ public class JwtFilter extends OncePerRequestFilter {
             String jwt = authHeader.substring(7);
             try {
                 String username = jwtService.extractUsername(jwt);
+                System.out.println("Username from JWT: " + username);
                 Optional<User> user = userRepository.findByUsername(username);
+                System.out.println("User present: " + user.isPresent());
 
                 if (username != null && user.isPresent() && jwtService.validateToken(jwt, username)) {
                     // Si el token es válido, establecemos el usuario en el request para usarlo en los controladores
                     request.setAttribute("user", user.get());
+                    System.out.println("Token válido. Autenticación exitosa.");
                     filterChain.doFilter(request, response);
                     return;
-                }
+                }else{System.out.println("Token inválido o usuario no encontrado.");}
             } catch (Exception e) {
                 // Token inválido
+                System.out.println("Error al validar el token:");
+                e.printStackTrace();
             }
-        }
+        }else{System.out.println("No se encontró el header Authorization o no es Bearer.");}
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("Unauthorized");
