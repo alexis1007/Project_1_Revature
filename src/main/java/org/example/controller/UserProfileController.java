@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class UserProfileController {
         this.userProfileService = userProfileService;
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<List<UserProfile>> getAllUserProfiles(HttpServletRequest request) {
         // Only manager can gat a list of all user-profiles
@@ -44,6 +46,7 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfileService.findAllUserProfiles());
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity<UserProfile> getUserProfileById(@PathVariable Long id, HttpServletRequest request) {
         // Only manager and user itself can get user-profile information
@@ -59,12 +62,14 @@ public class UserProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<UserProfile> registerUserProfile(@RequestBody UserProfile profile) {
         UserProfile savedProfile = userProfileService.registerUserProfile(profile);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProfile);
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
     @PutMapping("/{id}")
     public ResponseEntity<UserProfile> updateUserProfile(@PathVariable Long id,
                                                          @RequestBody UserProfile profileDetails,
@@ -81,6 +86,7 @@ public class UserProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserProfile(@PathVariable Long id, HttpServletRequest request) {
         // Only manager and user itself can delete a user-profile

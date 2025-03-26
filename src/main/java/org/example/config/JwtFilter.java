@@ -56,6 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 if (username != null && user.isPresent() && jwtService.validateToken(jwt, username)) {
                     // Si el token es válido, establecemos el usuario en el request para usarlo en los controladores
                     request.setAttribute("user", user.get());
+                    request.setAttribute("userRole", user.get().getUserType().getUserType());
                     filterChain.doFilter(request, response);
                     return;
                 }

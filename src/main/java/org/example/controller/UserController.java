@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class UserController {
         this.userService=userService;
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(HttpServletRequest request){
         // Only manager can gat a list of all users
@@ -46,6 +48,7 @@ public class UserController {
         return ResponseEntity.ok(userService.findAllUsers());
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id, HttpServletRequest request) {
         // Only manager and user itself can get user information
@@ -63,6 +66,7 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         log.info("Request to register user with name [{}]",user.getUsername());
@@ -71,7 +75,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id,
                                            @RequestBody User userDetails,
@@ -89,7 +93,7 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpServletRequest request) {
         // Only manager and user itself can delete user
