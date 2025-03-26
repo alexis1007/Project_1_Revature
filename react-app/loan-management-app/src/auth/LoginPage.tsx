@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { loginUser } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../models/User';
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -13,11 +14,14 @@ export const LoginPage = () => {
       const response = await loginUser({ username: username, password });
       if (!response.ok) throw new Error('Login failed');
 
-      const data = (await response.json()) as { token: string };
+      const data = (await response.json()) as { token: string, user: User };
       const token = data.token;
-      if (token) {
+      const user = data.user;
+
+      if (token && user) {
         // Store token securely
         localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
         navigate('/dashboard');
       } else {
         throw new Error('No token received');
