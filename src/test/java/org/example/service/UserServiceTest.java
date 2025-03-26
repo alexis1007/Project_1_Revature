@@ -1,33 +1,16 @@
 package org.example.service;
 
-<<<<<<< HEAD
-=======
 import java.util.Optional;
 
->>>>>>> 63795e407baa4c0aaa78ae2b3ef052ed9555c681
 import org.example.Service.UserService;
 import org.example.model.User;
 import org.example.model.UserType;
 import org.example.repository.UserRepository;
 import org.example.repository.UserTypeRepository;
-<<<<<<< HEAD
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-=======
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +23,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
->>>>>>> 63795e407baa4c0aaa78ae2b3ef052ed9555c681
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -98,10 +80,11 @@ public class UserServiceTest {
     public void testUpdateUser() {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userTypeRepository.findById(any(Long.class))).thenReturn(Optional.of(userType));
 
         User updatedUserDetails = new User();
         updatedUserDetails.setUsername("updateduser");
-        updatedUserDetails.setPasswordHash("newpassword");
+        updatedUserDetails.setPasswordHash(BCrypt.hashpw("newpassword", BCrypt.gensalt(4)));
         updatedUserDetails.setUserType(userType);
 
         Optional<User> updatedUser = userService.updateUser(1L, updatedUserDetails);
@@ -110,6 +93,23 @@ public class UserServiceTest {
         assertEquals("updateduser", updatedUser.get().getUsername());
         assertTrue(BCrypt.checkpw("newpassword", updatedUser.get().getPasswordHash()));
         verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUser_UserTypeNotFound() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+        when(userTypeRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        User updatedUserDetails = new User();
+        updatedUserDetails.setUsername("updateduser");
+        updatedUserDetails.setPasswordHash(BCrypt.hashpw("newpassword", BCrypt.gensalt(4)));
+        updatedUserDetails.setUserType(userType);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            userService.updateUser(1L, updatedUserDetails);
+        });
+
+        assertEquals("User type not found with id 1", exception.getMessage());
     }
 
     @Test
