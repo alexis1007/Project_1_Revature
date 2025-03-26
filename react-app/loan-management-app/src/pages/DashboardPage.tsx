@@ -18,6 +18,15 @@ export const DashboardPage = () => {
       </div>
 
       <div className="dashboard-nav">
+        <div className="header">
+          <button
+            className="buttons logout-button"
+            onClick={() => logoutUser().then(() => navigate('/'))}
+          >
+            Logout
+          </button>
+        </div>
+
         <div className="nav-card">
           <h3 className="section-title">Profile Management</h3>
           <Link to="/profile" className="nav-link">

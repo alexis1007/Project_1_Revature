@@ -26,6 +26,10 @@ export const UserProfiles = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
     fetchUserProfiles();
   }, []);
 
@@ -74,10 +78,26 @@ export const UserProfiles = () => {
   return (
     <div className="main-container userProfile-container">
       <div className="header">
-        <h2>User Operations</h2>
-        <button onClick={() => logoutUser().then(() => navigate('/'))}>
-          Logout
+
+        <button
+          className="buttons dashboard-button"
+          onClick={() =>
+            logoutUser().then(() => {
+              navigate('/dashboard');
+            })
+          }
+        >
+          Dashboard
         </button>
+        <h2>User Profile Management</h2>
+        <div className="header">
+          <button
+            className="logout-button"
+            onClick={() => logoutUser().then(() => navigate('/'))}
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       <div className="main-content-grid">

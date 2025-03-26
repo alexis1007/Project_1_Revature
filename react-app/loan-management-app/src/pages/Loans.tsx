@@ -32,6 +32,10 @@ export const Loans = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
     const user = JSON.parse(getUser() || '{}');
     setIsManager(user.userType?.id === 1);
     setCurrentUserId(user.id || null);
@@ -66,17 +70,25 @@ export const Loans = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Add the current user's profile to the loan when creating
       const user = JSON.parse(getUser() || '{}');
-      const loanWithUser = {
-        ...formData,
-        userProfile: { id: user.id },
-      };
+
+      let loanToSave;
 
       if (editingId) {
-        await updateLoan(editingId, loanWithUser as Loan);
+        // When editing, preserve the original userProfile that's already in formData
+        loanToSave = { ...formData };
       } else {
-        await addLoan(loanWithUser as Loan);
+        // Only for new loans, set the userProfile to current user
+        loanToSave = {
+          ...formData,
+          userProfile: { id: user.id },
+        };
+      }
+
+      if (editingId) {
+        await updateLoan(editingId, loanToSave as Loan);
+      } else {
+        await addLoan(loanToSave as Loan);
       }
       setEditingId(null);
       setFormData({
@@ -157,7 +169,18 @@ export const Loans = () => {
   return (
     <div className="main-container entity-container">
       <div className="header">
+        <button
+          className="buttons dashboard-button"
+          onClick={() =>
+            logoutUser().then(() => {
+              navigate('/dashboard');
+            })
+          }
+        >
+          Dashboard
+        </button>
         <h2>Loan Operations</h2>
+
         <button
           className="buttons logout-button"
           onClick={() =>
@@ -246,8 +269,8 @@ export const Loans = () => {
                 }
               >
                 <option value={1}>Home</option>
-                <option value={2}>Personal</option>
-                <option value={3}>Auto</option>
+                <option value={2}>Auto</option>
+                <option value={3}>Business</option>
               </select>
             </div>
 
