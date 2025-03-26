@@ -6,5 +6,5 @@ export interface Loan {
   totalBalance: number;
   applicationStatus: { id: number; status: string };
   loanType: { id: number; loanType: string };
-  userProfile: { id: number };
+  userProfile?: { id: number; firstName: string; lastName: string };
 }

@@ -84,3 +84,5 @@ export const rejectLoan = async (id: number, loan: Loan) => {
   });
   return response.json();
 };
+
+
