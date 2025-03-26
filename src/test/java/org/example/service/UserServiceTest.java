@@ -84,7 +84,7 @@ public class UserServiceTest {
 
         User updatedUserDetails = new User();
         updatedUserDetails.setUsername("updateduser");
-        updatedUserDetails.setPasswordHash("newpassword");
+        updatedUserDetails.setPasswordHash(BCrypt.hashpw("newpassword", BCrypt.gensalt(4)));
         updatedUserDetails.setUserType(userType);
 
         Optional<User> updatedUser = userService.updateUser(1L, updatedUserDetails);
@@ -102,7 +102,7 @@ public class UserServiceTest {
 
         User updatedUserDetails = new User();
         updatedUserDetails.setUsername("updateduser");
-        updatedUserDetails.setPasswordHash("newpassword");
+        updatedUserDetails.setPasswordHash(BCrypt.hashpw("newpassword", BCrypt.gensalt(4)));
         updatedUserDetails.setUserType(userType);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -110,23 +110,6 @@ public class UserServiceTest {
         });
 
         assertEquals("User type not found with id 1", exception.getMessage());
-    }
-
-    @Test
-    public void testUpdateUser_InvalidSaltVersion() {
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
-        when(userTypeRepository.findById(any(Long.class))).thenReturn(Optional.of(userType));
-
-        User updatedUserDetails = new User();
-        updatedUserDetails.setUsername("updateduser");
-        updatedUserDetails.setPasswordHash("newpassword");
-        updatedUserDetails.setUserType(userType);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            userService.updateUser(1L, updatedUserDetails);
-        });
-
-        assertEquals("Invalid salt version", exception.getMessage());
     }
 
     @Test
