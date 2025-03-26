@@ -10,6 +10,7 @@ import org.example.repository.UserTypeRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,6 +80,7 @@ public class UserServiceTest {
     public void testUpdateUser() {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userTypeRepository.findById(any(Long.class))).thenReturn(Optional.of(userType));
 
         User updatedUserDetails = new User();
         updatedUserDetails.setUsername("updateduser");
@@ -91,6 +93,23 @@ public class UserServiceTest {
         assertEquals("updateduser", updatedUser.get().getUsername());
         assertTrue(BCrypt.checkpw("newpassword", updatedUser.get().getPasswordHash()));
         verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUser_UserTypeNotFound() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+        when(userTypeRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        User updatedUserDetails = new User();
+        updatedUserDetails.setUsername("updateduser");
+        updatedUserDetails.setPasswordHash("newpassword");
+        updatedUserDetails.setUserType(userType);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            userService.updateUser(1L, updatedUserDetails);
+        });
+
+        assertEquals("User type not found with id 1", exception.getMessage());
     }
 
     @Test
