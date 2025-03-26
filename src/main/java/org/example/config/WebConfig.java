@@ -28,10 +28,10 @@ public class WebConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
+    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*"); // Use allowedOriginPatterns instead of allowedOrigins
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
@@ -39,7 +39,7 @@ public class WebConfig {
         source.registerCorsConfiguration("/**", config);
 
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(0); // Orden de ejecución (antes del filtro JWT)
+        bean.setOrder(0);
         return bean;
     }
 

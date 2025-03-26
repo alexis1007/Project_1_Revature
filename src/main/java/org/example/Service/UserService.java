@@ -1,17 +1,16 @@
 package org.example.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.example.model.User;
 import org.example.model.UserType;
 import org.example.repository.UserRepository;
 import org.example.repository.UserTypeRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserServiceInterface{
@@ -86,14 +85,27 @@ public class UserService implements UserServiceInterface{
     }
 
     @Override
-    public Optional<User> validateUser(String username, String password){
+    public Optional<User> validateUser(String username, String password) {
+        log.debug("Validando usuario: {}, longitud contraseña: {}", username, password.length());
         Optional<User> existingUser = userRepository.findByUsername(username);
-        log.info("User validation");
-        if(existingUser.isPresent() && BCrypt.checkpw(password, existingUser.get().getPasswordHash())) {
-            return existingUser;
-        } else {
-            log.warn("User doesn't exist");
-            return Optional.empty();
+        
+        if (existingUser.isPresent()) {
+            String storedHash = existingUser.get().getPasswordHash();
+            log.debug("Usuario encontrado, hash almacenado: {}", storedHash);
+            
+            try {
+                boolean matches = BCrypt.checkpw(password, storedHash);
+                log.debug("Resultado comparación de contraseña: {}", matches);
+                
+                if (matches) {
+                    return existingUser;
+                }
+            } catch (Exception e) {
+                log.error("Error comparando contraseñas: {}", e.getMessage(), e);
+            }
         }
+        
+        log.warn("Credenciales inválidas para usuario: {}", username);
+        return Optional.empty();
     }
 }

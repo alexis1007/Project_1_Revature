@@ -33,20 +33,19 @@ public class LoanAppController {
     public LoanAppController(LoanApplicationService loanAppService, UserProfileService userProfileService) {
         this.loanAppService = loanAppService;
         this.userProfileService = userProfileService;
-
     }
 
     /**
      * Returns all loans.
      */
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_manager')")
     @GetMapping
     public ResponseEntity<List<LoanApplication>> getAllLoans() {
         log.info("Request all loans");
         return ResponseEntity.ok(loanAppService.findAllLoans());
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_manager') or hasAuthority('ROLE_regular')")
     @GetMapping("/user/{id}")
     public ResponseEntity<List<LoanApplication>> getAllLoans(@PathVariable Long id) {
         log.info("Request all loans by user");
@@ -56,7 +55,7 @@ public class LoanAppController {
     /**
      * Returns a specific loan by ID.
      */
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_manager') or hasAuthority('ROLE_regular')")
     @GetMapping("/{id}")
     public ResponseEntity<LoanApplication> getLoanById(@PathVariable Long id) {
         log.info("Request loan with id [{}]",id);
@@ -67,12 +66,8 @@ public class LoanAppController {
 
     /**
      * Creates a new loan for the currently logged-in user.
-     *
-     * @param loan    The loan to be created.
-     * @param request The HttpServletRequest containing the logged-in user.
-     * @return The saved loan.
      */
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_regular')")
     @PostMapping
     public ResponseEntity<LoanApplication> createLoan(@RequestBody LoanApplication loan, HttpServletRequest request) {
         User sessionUser = (User) request.getAttribute("user");
@@ -87,13 +82,12 @@ public class LoanAppController {
 
         log.info("Loan created by user [{}]",sessionUser.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedLoan);
-
     }
 
     /**
      * Updates an existing loan.
      */
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_manager')")
     @PutMapping("/{id}")
     public ResponseEntity<LoanApplication> updateLoan(@PathVariable Long id,
             @RequestBody LoanApplication loanApplication) {
@@ -106,7 +100,7 @@ public class LoanAppController {
     /**
      * Deletes a loan.
      */
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_manager')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {
         boolean deleted = loanAppService.deleteLoan(id);
@@ -114,7 +108,7 @@ public class LoanAppController {
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_manager')")
     @PutMapping("/{id}/approve")
     public ResponseEntity<LoanApplication> approveLoan(@PathVariable Long id,
             @RequestBody LoanApplication loanApplication) {
@@ -124,7 +118,7 @@ public class LoanAppController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_manager')")
     @PutMapping("/{id}/reject")
     public ResponseEntity<LoanApplication> rejectLoan(@PathVariable Long id,
             @RequestBody LoanApplication loanApplication) {

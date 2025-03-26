@@ -1,16 +1,17 @@
 package org.example.Service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
@@ -40,8 +41,11 @@ public class JwtService {
     }
 
     public String generateToken(String username, String userRole) {
+        // Asegurar que el rol tenga el prefijo ROLE_ cuando usas hasRole()
+        String role = userRole.startsWith("ROLE_") ? userRole : "ROLE_" + userRole;
+        
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", userRole);
+        claims.put("role", role);
         return createToken(claims, username);
     }
 

@@ -31,10 +31,10 @@ public class UserProfileController {
         this.userProfileService = userProfileService;
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_manager')")
     @GetMapping
     public ResponseEntity<List<UserProfile>> getAllUserProfiles(HttpServletRequest request) {
-        // Only manager can gat a list of all user-profiles
+        // Only manager can get a list of all user-profiles
         User sessionUser = (User) request.getAttribute("user");
         log.info("User [{}] wants a list of all users", sessionUser.getId());
 
@@ -46,7 +46,7 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfileService.findAllUserProfiles());
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_manager') or hasAuthority('ROLE_regular')")
     @GetMapping("/{id}")
     public ResponseEntity<UserProfile> getUserProfileById(@PathVariable Long id, HttpServletRequest request) {
         // Only manager and user itself can get user-profile information
@@ -62,14 +62,14 @@ public class UserProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority('ROLE_manager')")
     @PostMapping
     public ResponseEntity<UserProfile> registerUserProfile(@RequestBody UserProfile profile) {
         UserProfile savedProfile = userProfileService.registerUserProfile(profile);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProfile);
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_manager') or hasAuthority('ROLE_regular')")
     @PutMapping("/{id}")
     public ResponseEntity<UserProfile> updateUserProfile(@PathVariable Long id,
                                                          @RequestBody UserProfile profileDetails,
@@ -86,19 +86,18 @@ public class UserProfileController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_manager') or hasAuthority('ROLE_regular')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserProfile(@PathVariable Long id, HttpServletRequest request) {
-        // Only manager and user itself can delete a user-profile
+        // Only manager and user itself can delete user-profile
         User sessionUser = (User) request.getAttribute("user");
-        log.info("User [{}] requests to delete user [{}]", sessionUser.getId(),id);
+        log.info("User [{}] requests to delete user [{}]", sessionUser.getId(), id);
         if(sessionUser.getUserType().getId() != 1 && sessionUser.getId() != id) {
-            log.warn("Access denied to user [{}]", sessionUser.getId());
+            log.warn("Access denied for user [{}]", sessionUser.getId());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-
+        
         boolean deleted = userProfileService.deleteUserProfile(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
-
 }

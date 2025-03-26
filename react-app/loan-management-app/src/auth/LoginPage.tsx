@@ -10,14 +10,26 @@ export const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     try {
+      // Agrega logs para depuración
+      console.log('Intentando login con:', { username, password });
+      
       const response = await loginUser({ username: username, password });
-      if (!response.ok) throw new Error('Login failed');
-
-      const data = (await response.json()) as { token: string, user: User };
+      
+      if (!response.ok) {
+        // Capturar el mensaje de error del backend
+        const errorText = await response.text();
+        console.error('Error del servidor:', errorText);
+        throw new Error(`Login failed: ${response.status} ${errorText}`);
+      }
+  
+      const data = await response.json();
+      console.log('Login exitoso:', data);
+      
       const token = data.token;
       const user = data.user;
-
+  
       if (token && user) {
         // Store token securely
         localStorage.setItem('token', token);
@@ -26,12 +38,9 @@ export const LoginPage = () => {
       } else {
         throw new Error('No token received');
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      } else {
-        console.error('Unknown error occurred');
-      }
+    } catch (error) {
+      console.error('Error de login:', error);
+      // Manejo de error
     }
   };
 
