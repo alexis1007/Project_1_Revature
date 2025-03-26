@@ -47,50 +47,40 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Obtener header Authorization
         String authHeader = request.getHeader("Authorization");
 
-        // Si no hay token, continuar con la cadena de filtros
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String jwt = authHeader.substring(7);
-        String username = null;
-        
-        try {
-            username = jwtService.extractUsername(jwt);
-            Optional<User> user = userRepository.findByUsername(username);
-            
-            if (username != null && user.isPresent() && jwtService.validateToken(jwt, username)) {
-                String userRole = user.get().getUserType().getUserType();
-                // Asegurar que tenga el prefijo ROLE_
-                String roleName = userRole.startsWith("ROLE_") ? userRole : "ROLE_" + userRole;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String jwt = authHeader.substring(7);
+            try {
+                String username = jwtService.extractUsername(jwt);
+                Optional<User> userOpt = userRepository.findByUsername(username);
                 
-                log.debug("User role: {}, formatted to: {}", userRole, roleName);
-                
-                // Crear autoridades para Spring Security
-                List<GrantedAuthority> authorities = Collections.singletonList(
-                    new SimpleGrantedAuthority(roleName)
-                );
-                
-                // Crear token de autenticación y establecerlo en el contexto
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(username, null, authorities);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                
-                // También guardar el usuario para referencia
-                request.setAttribute("user", user.get());
-                
-                // ***IMPORTANTE: SIEMPRE continuar la cadena de filtros***
+                if (username != null && userOpt.isPresent() && jwtService.validateToken(jwt, username)) {
+                    User user = userOpt.get();
+                    String userRole = user.getUserType().getUserType();
+                    String roleName = userRole.startsWith("ROLE_") ? userRole : "ROLE_" + userRole;
+                    
+                    // Crear autoridades
+                    List<GrantedAuthority> authorities = Collections.singletonList(
+                        new SimpleGrantedAuthority(roleName)
+                    );
+                    
+                    // Configurar autenticación
+                    UsernamePasswordAuthenticationToken authentication = 
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    
+                    // IMPORTANTE: Guardar el objeto user completo en la solicitud
+                    request.setAttribute("user", user);
+                    
+                    log.debug("Autenticación configurada para usuario: {}, rol: {}", username, roleName);
+                }
+            } catch (Exception e) {
+                log.error("Error procesando token JWT", e);
             }
-        } catch (Exception e) {
-            log.error("Error procesando token JWT", e);
         }
         
-        // Siempre continuar con la cadena de filtros, se haya autenticado o no
         filterChain.doFilter(request, response);
     }
 }
