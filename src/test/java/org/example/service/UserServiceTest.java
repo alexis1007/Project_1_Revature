@@ -1,30 +1,12 @@
 package org.example.service;
 
-<<<<<<< HEAD
-=======
 import java.util.Optional;
 
->>>>>>> 63795e407baa4c0aaa78ae2b3ef052ed9555c681
 import org.example.Service.UserService;
 import org.example.model.User;
 import org.example.model.UserType;
 import org.example.repository.UserRepository;
 import org.example.repository.UserTypeRepository;
-<<<<<<< HEAD
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-=======
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,7 +22,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
->>>>>>> 63795e407baa4c0aaa78ae2b3ef052ed9555c681
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {

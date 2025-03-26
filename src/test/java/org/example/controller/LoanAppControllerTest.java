@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.example.Service.LoanApplicationService;
 import org.example.model.LoanApplication;
+import org.example.model.ApplicationStatus;
+import org.example.model.LoanType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +31,8 @@ public class LoanAppControllerTest {
     private LoanApplicationService loanApplicationService;
 
     private LoanApplication loanApplication;
+    private ApplicationStatus applicationStatus;
+    private LoanType loanType;
 
     @BeforeEach
     public void setUp() {
@@ -38,6 +42,16 @@ public class LoanAppControllerTest {
         loanApplication.setInterest(new BigDecimal("5.00"));
         loanApplication.setTermLength(12);
         loanApplication.setTotalBalance(new BigDecimal("1050.00"));
+
+        applicationStatus = new ApplicationStatus();
+        applicationStatus.setId(1);
+        applicationStatus.setStatus("PENDING");
+        loanApplication.setApplicationStatus(applicationStatus);
+
+        loanType = new LoanType();
+        loanType.setId(1L);
+        loanType.setLoanType("PERSONAL");
+        loanApplication.setLoanType(loanType);
     }
 
     @Test
@@ -66,9 +80,9 @@ public class LoanAppControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/loans")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}"))
+                .content("{'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00, 'applicationStatus': {'id': 1, 'status': 'PENDING'}, 'loanType': {'id': 1, 'loanType': 'PERSONAL'}}"))
                 .andExpect(status().isCreated())
-                .andExpect(content().json("{'loanApplication': {'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}}"));
+                .andExpect(content().json("{'loanApplication': {'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00, 'applicationStatus': {'id': 1, 'status': 'PENDING'}, 'loanType': {'id': 1, 'loanType': 'PERSONAL'}}}"));
     }
 
     @Test
@@ -77,9 +91,9 @@ public class LoanAppControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/loans/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}"))
+                .content("{'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00, 'applicationStatus': {'id': 1, 'status': 'PENDING'}, 'loanType': {'id': 1, 'loanType': 'PERSONAL'}}"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}"));
+                .andExpect(content().json("{'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00, 'applicationStatus': {'id': 1, 'status': 'PENDING'}, 'loanType': {'id': 1, 'loanType': 'PERSONAL'}}"));
     }
 
     @Test
@@ -99,7 +113,7 @@ public class LoanAppControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{'applicationStatus': {'id': 2, 'status': 'APPROVED'}}"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}"));
+                .andExpect(content().json("{'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00, 'applicationStatus': {'id': 1, 'status': 'PENDING'}, 'loanType': {'id': 1, 'loanType': 'PERSONAL'}}"));
     }
 
     @Test
@@ -110,6 +124,6 @@ public class LoanAppControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{'applicationStatus': {'id': 3, 'status': 'REJECTED'}}"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00}"));
+                .andExpect(content().json("{'id': 1, 'principalBalance': 1000.00, 'interest': 5.00, 'termLength': 12, 'totalBalance': 1050.00, 'applicationStatus': {'id': 1, 'status': 'PENDING'}, 'loanType': {'id': 1, 'loanType': 'PERSONAL'}}"));
     }
 }
