@@ -182,14 +182,20 @@ input[type='number']::-webkit-inner-spin-button {
   margin-bottom: 2rem;
 }
 
-.logout-button {
+.dashboard-button {
   padding: 0.5rem 1rem;
-  background-color: var(--danger);
+  background-color: var(--primary);
   color: white;
   border-radius: 0.375rem;
   font-weight: 600;
   border: none;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button {
+  background-color: var(--danger);
+  color: white;
 }
 
 .logout-button:hover {
