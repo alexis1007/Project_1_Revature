@@ -66,7 +66,7 @@ public class LoanAppRepositoryTest {
         applicationStatusRepository.save(applicationStatus);
 
         LoanType loanType = new LoanType();
-        loanType.setType("PERSONAL");
+        loanType.setLoanType("PERSONAL");
         loanTypeRepository.save(loanType);
 
         LoanApplication loanApplication = new LoanApplication();
@@ -110,7 +110,7 @@ public class LoanAppRepositoryTest {
         applicationStatusRepository.save(applicationStatus);
 
         LoanType loanType = new LoanType();
-        loanType.setType("PERSONAL");
+        loanType.setLoanType("PERSONAL");
         loanTypeRepository.save(loanType);
 
         LoanApplication loanApplication = new LoanApplication();
@@ -157,7 +157,7 @@ public class LoanAppRepositoryTest {
         applicationStatusRepository.save(applicationStatus);
 
         LoanType loanType = new LoanType();
-        loanType.setType("PERSONAL");
+        loanType.setLoanType("PERSONAL");
         loanTypeRepository.save(loanType);
 
         LoanApplication loanApplication = new LoanApplication();
