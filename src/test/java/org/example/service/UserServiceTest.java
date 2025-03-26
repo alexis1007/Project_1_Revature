@@ -113,6 +113,23 @@ public class UserServiceTest {
     }
 
     @Test
+    public void testUpdateUser_InvalidSaltVersion() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
+        when(userTypeRepository.findById(any(Long.class))).thenReturn(Optional.of(userType));
+
+        User updatedUserDetails = new User();
+        updatedUserDetails.setUsername("updateduser");
+        updatedUserDetails.setPasswordHash("newpassword");
+        updatedUserDetails.setUserType(userType);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            userService.updateUser(1L, updatedUserDetails);
+        });
+
+        assertEquals("Invalid salt version", exception.getMessage());
+    }
+
+    @Test
     public void testDeleteUser() {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
         doNothing().when(userRepository).delete(any(User.class));
