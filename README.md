@@ -1,36 +1,77 @@
-# Loan Management System: Spring Boot & React Application
+# 🏦 Loan Management System
 
-## **Project Overview**
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-19.0.0-blue.svg)](https://reactjs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-blue.svg)](https://www.postgresql.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-This project is a **Loan Management System** developed as part of **Iteration 2 (Project 1)**. The goal was to refactor an existing system built with Javalin and JDBC into a modern, full-stack application using **Spring Boot** for the back-end and **React** for the front-end. The application supports user registration, authentication, loan application management, and role-based access control.
+## 📑 Table of Contents
+
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Architecture](#architecture)
+- [Endpoints](#endpoints)
+- [Setup Instructions](#setup-instructions)
+- [Testing](#testing)
+- [Logging](#logging)
+- [Deliverables](#deliverables)
+- [Future Enhancements](#future-enhancements)
+
+## 🌟 Project Overview
+
+This **Loan Management System** is a comprehensive financial application developed as part of **Iteration 2 (Project 1)**. It represents a significant evolution from our previous system, transforming a Javalin-JDBC implementation into a modern, scalable full-stack application powered by **Spring Boot** and **React**.
+
+The system facilitates seamless loan processing workflows between borrowers and managers through an intuitive interface with robust backend services. It features comprehensive authentication, profile management, and loan application processing with role-based access control.
 
 ---
 
-## **Features**
+## 🔑 Key Features
 
 ### **1. User Registration & Authentication**
-- **Endpoints:**
-  - `POST /auth/register`: Register new users.
-  - `POST /auth/login`: Authenticate users and issue a JWT token.
-  - `POST /auth/logout`: End the current session.
-- **Role Management:**
-  - Roles are stored in the database (`ROLE_regular` for regular users and `ROLE_manager` for managers).
-  - Role-based access control ensures that only managers can approve/reject loans or manage user types.
+- **Secure Authentication Flow:**
+  - `POST /api/auth/register`: Create new accounts with encrypted password storage
+  - `POST /api/auth/login`: JWT-based authentication with configurable token expiration
+  - `POST /api/auth/logout`: Session termination with token invalidation
+
+- **Enhanced Security:**
+  - Password hashing using BCrypt with salting for secure credential storage
+  - Protection against common vulnerabilities:
+    - CSRF: Using JWT tokens instead of cookies for authentication
+    - XSS: Input validation and sanitization in both front-end and back-end
+  - Token-based authorization with proper signature verification for all protected endpoints
+
+- **Role-Based Access Control:**
+  - Dynamic permission system based on database-stored roles
+  - Fine-grained access control (`ROLE_regular` and `ROLE_manager`)
+  - Authorization guards on sensitive operations
 
 ### **2. User Profile Management**
-- Users can:
-  - View and update their own profiles.
-  - Delete their accounts (while maintaining referential integrity).
+- **Comprehensive Profile Features:**
+  - Complete user information management
+  - Data validation and sanitization
 
-### **3. Loan Applications**
-- **Regular Users:**
-  - Create new loan applications.
-  - View and edit their own loan applications.
-- **Managers:**
-  - View all loan applications.
-  - Approve or reject any loan application.
-- **Loan Data Fields:**
-  - Amount requested, loan type, and status (*pending*, *approved*, *rejected*).
+- **Account Management:**
+  - Self-service profile updates
+  - Secure account deletion with data integrity protection
+  - Privacy controls for personal information
+
+### **3. Loan Application Processing**
+- **User-Friendly Application Flow:**
+  - Intuitive loan creation interface
+  - Real-time status tracking
+  - Application history with detailed records
+  
+- **Role-Specific Capabilities:**
+  - **For Borrowers:**
+    - Multiple concurrent loan applications
+    - Application editing before approval
+    - Personal loan history dashboard
+  
+  - **For Managers:**
+    - Comprehensive application review interface
+    - Individual loan approval/rejection workflow
+    - Basic filtering by loan status (pending, approved, rejected)
 
 ### **4. Role Management**
 - Managers can manage user roles (`UserType`):
@@ -95,10 +136,10 @@ This project is a **Loan Management System** developed as part of **Iteration 2 
 - `PUT /loans/{id}/reject`: Reject a loan (manager only).
 
 ### **User Types:**
-- `GET /user_types`: View all user types.
-- `POST /user_types`: Create a new user type (manager only).
-- `PUT /user_types/{id}`: Update a user type (manager only).
-- `DELETE /user_types/{id}`: Delete a user type (manager only).
+- `GET /api/user_types`: View all user types.
+- `POST /api/user_types`: Create a new user type (manager only).
+- `PUT /api/user_types/{id}`: Update a user type (manager only).
+- `DELETE /api/user_types/{id}`: Delete a user type (manager only).
 
 ---
 
@@ -107,6 +148,7 @@ This project is a **Loan Management System** developed as part of **Iteration 2 
 ### **1. Back-End Setup**
 1. Install **Java 17** and **Maven**.
 2. Configure the database in `src/main/resources/application.properties`:
+
    ```properties
    spring.datasource.url=jdbc:postgresql://localhost:5432/project1
    spring.datasource.username=postgres
@@ -122,7 +164,9 @@ This project is a **Loan Management System** developed as part of **Iteration 2 
 ### **2. Front-End Setup**
 1. Install Node.js (version 16 or higher).
 2. Navigate to the React app directory:
+```bash
 cd react-app/loan-management-app
+```
 3. Install dependencies:
     ```bash
     npm install
