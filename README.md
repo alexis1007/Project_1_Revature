@@ -127,10 +127,10 @@ npm install
 npm start
 5. The front-end will be available at http://localhost:3000.
 ## **Testing**
-## ***Unit Tests:**
+### **Unit Tests:**
 - Run back-end tests using Maven:
 mvn test
-## ***Example Test (JUnit + Mockito):**
+### **Example Test (JUnit + Mockito):**
 @Test
 public void testValidateUser() {
     User user = new User();
@@ -145,23 +145,23 @@ public void testValidateUser() {
 }
 
 ## **Logging**
-## ***Logback Configuration:**
+### **Logback Configuration:**
 Logs are configured in src/main/resources/application.properties:
 logging.level.root=INFO
 logging.level.org.example=DEBUG
 logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n
 
 
-## ***Deliverables**
-## ***Source Code:**
+## **Deliverables**
+### **Source Code:**
 - Back-end: Spring Boot application.
 - Front-end: React application.
-## ***Database Scripts:**
+### **Database Scripts:**
 - data.sql for initializing the database.
-## ***Documentation:**
+### **Documentation:**
 - This README file with setup instructions and API details.
 
-## ***Future Enhancements**
+## **Future Enhancements**
 - Add integration tests for RESTful endpoints.
 - Improve UI/UX with better styling and validation.
 - Implement email notifications for loan status updates.
