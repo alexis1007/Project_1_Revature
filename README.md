@@ -111,10 +111,12 @@ This project is a **Loan Management System** developed as part of **Iteration 2 
    spring.datasource.url=jdbc:postgresql://localhost:5432/project1
    spring.datasource.username=postgres
    spring.datasource.password=password
-
+   ```
 3. Run the application:
-mvn clean install
-mvn spring-boot:run
+   ```bash
+   mvn clean install
+   mvn spring-boot:run
+   ```
 4. The back-end will be available at http://localhost:7070.
 
 ### **2. Front-End Setup**
@@ -122,10 +124,14 @@ mvn spring-boot:run
 2. Navigate to the React app directory:
 cd react-app/loan-management-app
 3. Install dependencies:
-npm install
+    ```bash
+    npm install
+    ```
 4. Start the development server:
-npm start
-5. The front-end will be available at http://localhost:3000.
+    ```bash
+    npm run dev
+    ```
+5. The front-end will be available at http://localhost:5173.
 
 ---
 
@@ -163,6 +169,7 @@ public void testValidateUser() {
   logging.level.root=INFO
   logging.level.org.example=DEBUG
   logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n
+  ```
 
 ---
 
