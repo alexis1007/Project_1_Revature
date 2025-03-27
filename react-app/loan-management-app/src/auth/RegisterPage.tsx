@@ -4,7 +4,6 @@ import { registerUser } from '../services/authService';
 export const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [id, setUserTypeId] = useState('');
   const [message, setMessage] = useState('');
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -14,7 +13,7 @@ export const RegisterPage = () => {
         user: {
           username: username,
           passwordHash: password,
-          userType: { id: parseInt(id) },
+          userType: { id: 2 },
         }
       });
       if (!response.ok) throw new Error('Registration failed');
@@ -64,20 +63,7 @@ export const RegisterPage = () => {
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="userTypeId" className="input-label">
-            User Type ID
-          </label>
-          <input
-            id="id"
-            value={id}
-            onChange={(e) => setUserTypeId(e.target.value)}
-            className="form-input"
-            placeholder="User Type ID"
-            type="number"
-            required
-          />
-        </div>
+
 
         <button type="submit" className="submit-button">
           Register

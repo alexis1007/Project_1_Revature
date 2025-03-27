@@ -1,5 +1,5 @@
 export interface ApplicationStatus {
-  id: number; // Removed the question mark to make it required
+  id: number;
   status?: string;
   description?: string;
 }

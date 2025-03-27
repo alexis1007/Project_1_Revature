@@ -43,7 +43,6 @@ public class UserProfileService implements UserProfileServiceInterface {
             existingProfile.setFirstName(profile.getFirstName());
             existingProfile.setLastName(profile.getLastName());
             existingProfile.setPhoneNumber(profile.getPhoneNumber());
-            // Update additional fields as necessary
             return userProfileRepository.save(existingProfile);
         });
     }
@@ -56,5 +55,4 @@ public class UserProfileService implements UserProfileServiceInterface {
             return true;
         }).orElse(false);
     }
-
 }

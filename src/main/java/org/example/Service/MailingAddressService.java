@@ -1,5 +1,7 @@
 package org.example.Service;
 
+import java.util.List;
+import java.util.Optional;
 
 import org.example.model.MailingAddress;
 import org.example.model.UserProfile;
@@ -7,9 +9,6 @@ import org.example.repository.MailingAddressRepository;
 import org.example.repository.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MailingAddressService implements MailingAddressInterface {
@@ -23,25 +22,21 @@ public class MailingAddressService implements MailingAddressInterface {
         this.userProfileRepository = userProfileRepository;
     }
 
-    // Getting all directions
     @Override
     public List<MailingAddress> findAllAddresses() {
         return mailingAddressRepository.findAll();
     }
 
-    // Getting address by id
     @Override
     public Optional<MailingAddress> findAddressById(Long id) {
         return mailingAddressRepository.findById(id);
     }
 
-    // Creating new Address
     @Override
     public MailingAddress createAddress(MailingAddress mailingAddress) {
         return mailingAddressRepository.save(mailingAddress);
     }
 
-    // Updating Address
     @Override
     public Optional<MailingAddress> updateAddress(Long id, MailingAddress mailingAddress) {
         return mailingAddressRepository.findById(id).map(existingAddress -> {
@@ -54,7 +49,6 @@ public class MailingAddressService implements MailingAddressInterface {
         });
     }
 
-    // Eliminar una dirección
     @Override
     public boolean deleteAddress(Long id) {
         Optional<MailingAddress> currentAddress = mailingAddressRepository.findById(id);

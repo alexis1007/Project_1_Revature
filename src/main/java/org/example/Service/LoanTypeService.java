@@ -1,14 +1,14 @@
 package org.example.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.example.model.LoanApplication;
 import org.example.model.LoanType;
 import org.example.repository.LoanAppRepository;
 import org.example.repository.LoanTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 @Service
 public class LoanTypeService implements LoanTypeInterface{
 
@@ -52,7 +52,6 @@ public class LoanTypeService implements LoanTypeInterface{
         if (optionalLoanType.isPresent()) {
             LoanType loanType = optionalLoanType.get();
 
-            // Desvincula este LoanType de los LoanApplications relacionados
             for (LoanApplication app : loanType.getLoanApplications()) {
                 app.setLoanType(null);
                 loanAppRepository.save(app);

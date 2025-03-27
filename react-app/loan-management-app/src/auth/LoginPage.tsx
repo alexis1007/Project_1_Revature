@@ -19,7 +19,7 @@ export const LoginPage = () => {
       const user = data.user;
 
       if (token && user) {
-        // Store token securely
+        // Store token
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         navigate('/dashboard');

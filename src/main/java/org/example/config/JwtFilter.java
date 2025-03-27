@@ -61,14 +61,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 System.out.println("User present: " + user.isPresent());
 
                 if (username != null && user.isPresent() && jwtService.validateToken(jwt, username)) {
-                    // Si el token es válido, establecemos el usuario en el request para usarlo en los controladores
                     request.setAttribute("user", user.get());
                     System.out.println("Token válido. Autenticación exitosa.");
                     filterChain.doFilter(request, response);
                     return;
                 }else{System.out.println("Token inválido o usuario no encontrado.");}
             } catch (Exception e) {
-                // Token inválido
+                // Token invalid
                 System.out.println("Error al validar el token:");
                 e.printStackTrace();
             }
