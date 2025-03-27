@@ -7,8 +7,8 @@
 
 ## 📑 Table of Contents
 
-- [Project Overview](#project-overview)
-- [Features](#features)
+- [Project Overview](#Project-Overview)
+- [Features](#Key-Features)
 - [Technology Stack](#technology-stack)
 - [Architecture](#architecture)
 - [Endpoints](#endpoints)
@@ -18,7 +18,7 @@
 - [Deliverables](#deliverables)
 - [Future Enhancements](#future-enhancements)
 
-## 🌟 Project Overview
+## Project Overview
 
 This **Loan Management System** is a comprehensive financial application developed as part of **Iteration 2 (Project 1)**. It represents a significant evolution from our previous system, transforming a Javalin-JDBC implementation into a modern, scalable full-stack application powered by **Spring Boot** and **React**.
 
@@ -26,7 +26,7 @@ The system facilitates seamless loan processing workflows between borrowers and 
 
 ---
 
-## 🔑 Key Features
+## Key Features
 
 ### **1. User Registration & Authentication**
 - **Secure Authentication Flow:**
