@@ -22,8 +22,8 @@ public class WebConfig {
     public FilterRegistrationBean<Filter> jwtFilterRegistration() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter(jwtFilter);
-        registration.addUrlPatterns("/api/*"); // Aplica el filtro a todas las rutas de la API
-        registration.setOrder(1); // Orden de ejecución (primero)
+        registration.addUrlPatterns("/api/*");
+        registration.setOrder(1);
         return registration;
     }
 
@@ -31,7 +31,7 @@ public class WebConfig {
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*"); // Use allowedOriginPatterns instead of allowedOrigins
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
@@ -39,7 +39,7 @@ public class WebConfig {
         source.registerCorsConfiguration("/**", config);
 
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(0); // Orden de ejecución (antes del filtro JWT)
+        bean.setOrder(0);
         return bean;
     }
 

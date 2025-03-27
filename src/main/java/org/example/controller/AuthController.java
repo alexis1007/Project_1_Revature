@@ -59,7 +59,4 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
-
-    // Con JWT no necesitamos un endpoint de logout explícito,
-    // ya que el token se maneja completamente en el cliente
 }

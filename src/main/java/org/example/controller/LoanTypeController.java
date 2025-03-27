@@ -1,16 +1,24 @@
 package org.example.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Optional;
+
 import org.example.Service.LoanTypeService;
 import org.example.model.LoanType;
 import org.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/type")
@@ -21,8 +29,6 @@ public class LoanTypeController {
     public LoanTypeController(LoanTypeService loanTypeService) {
         this.loanTypeService = loanTypeService;
     }
-
-    //Getting type by id
 
     @GetMapping
     public  ResponseEntity<?> getAllLoanTypes(HttpServletRequest request){
@@ -82,5 +88,4 @@ public class LoanTypeController {
         return isDeleted ? ResponseEntity.status(HttpStatus.NO_CONTENT).build()
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 }

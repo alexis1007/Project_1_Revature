@@ -35,9 +35,6 @@ public class LoanAppController {
 
     }
 
-    /**
-     * Returns all loans.
-     */
     @GetMapping
     public ResponseEntity<List<LoanApplication>> getAllLoans() {
         log.info("Request all loans");
@@ -50,9 +47,6 @@ public class LoanAppController {
         return ResponseEntity.ok(userProfileService.findUserProfileById(id).get().getLoanApplications());
     }
 
-    /**
-     * Returns a specific loan by ID.
-     */
     @GetMapping("/{id}")
     public ResponseEntity<LoanApplication> getLoanById(@PathVariable Long id) {
         log.info("Request loan with id [{}]",id);
@@ -85,9 +79,6 @@ public class LoanAppController {
 
     }
 
-    /**
-     * Updates an existing loan.
-     */
     @PutMapping("/{id}")
     public ResponseEntity<LoanApplication> updateLoan(@PathVariable Long id,
             @RequestBody LoanApplication loanApplication) {
@@ -97,9 +88,6 @@ public class LoanAppController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Deletes a loan.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {
         boolean deleted = loanAppService.deleteLoan(id);

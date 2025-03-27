@@ -26,7 +26,6 @@ public class UserController {
     // private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     
-
     public UserController(UserService userService) {
         this.userService=userService;
     }
@@ -71,7 +70,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id,
                                            @RequestBody User userDetails,
@@ -88,7 +86,6 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, HttpServletRequest request) {

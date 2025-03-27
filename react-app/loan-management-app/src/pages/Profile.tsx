@@ -76,7 +76,7 @@ export const UserProfiles = () => {
   };
 
   return (
-    <div className="main-container userProfile-container">
+    <div className="main-container entity-container">
       <div className="header">
 
         <button
@@ -92,7 +92,7 @@ export const UserProfiles = () => {
         <h2>User Profile Management</h2>
         <div className="header">
           <button
-            className="logout-button"
+            className="buttons logout-button"
             onClick={() => logoutUser().then(() => navigate('/'))}
           >
             Logout

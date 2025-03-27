@@ -41,7 +41,6 @@ export const Loans = () => {
     setCurrentUserId(user.id || null);
     fetchLoans();
 
-    // Add this debug logging
     console.log('User type:', user.userType);
     console.log('Is manager:', user.userType?.id === 1);
   }, []);
