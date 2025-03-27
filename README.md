@@ -126,11 +126,19 @@ npm install
 4. Start the development server:
 npm start
 5. The front-end will be available at http://localhost:3000.
+
+---
+
 ## **Testing**
+
 ### **Unit Tests:**
 - Run back-end tests using Maven:
-mvn test
+  ```bash
+  mvn test
+  ```
+
 ### **Example Test (JUnit + Mockito):**
+```java
 @Test
 public void testValidateUser() {
     User user = new User();
@@ -143,23 +151,34 @@ public void testValidateUser() {
     assertTrue(validatedUser.isPresent());
     assertEquals("testuser", validatedUser.get().getUsername());
 }
+```
+
+---
 
 ## **Logging**
-### **Logback Configuration:**
-Logs are configured in src/main/resources/application.properties:
-logging.level.root=INFO
-logging.level.org.example=DEBUG
-logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n
 
+### **Logback Configuration:**
+- Logs are configured in `src/main/resources/application.properties`:
+  ```properties
+  logging.level.root=INFO
+  logging.level.org.example=DEBUG
+  logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n
+
+---
 
 ## **Deliverables**
+
 ### **Source Code:**
 - Back-end: Spring Boot application.
 - Front-end: React application.
+
 ### **Database Scripts:**
-- data.sql for initializing the database.
+- `data.sql` for initializing the database.
+
 ### **Documentation:**
 - This README file with setup instructions and API details.
+
+---
 
 ## **Future Enhancements**
 - Add integration tests for RESTful endpoints.
